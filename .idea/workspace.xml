@@ -4,38 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/Chess.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/Constants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-bishop.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-king.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-knight.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-pawn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-queen.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-rook.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-bishop.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-king.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-knight.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-pawn.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-queen.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-rook.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Position.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/Pawn.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/Piece.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/ByteUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/LoadUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/PrecomputedMoveData.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/initial-board.fen" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/midgame-board.fen" afterDir="false" />
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Initial Commit">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/NewPawn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/Chess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/initial-board.fen" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/initial-board.fen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,13 +55,14 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/tayling/Documents/Projects/ChessGame",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
-    "project.structure.last.edited": "Modules",
+    "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   },
@@ -106,7 +83,7 @@
   </component>
   <component name="RunManager">
     <configuration name="Run Chess" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="main.java.org.example.UI.Chess" />
+      <option name="MAIN_CLASS_NAME" value="org.example.UI.Chess" />
       <module name="ChessGame" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -121,8 +98,17 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1678203425519</updated>
-      <workItem from="1678203426578" duration="42868000" />
+      <workItem from="1678203426578" duration="46030000" />
+      <workItem from="1678365873002" duration="6865000" />
     </task>
+    <task id="LOCAL-00001" summary="Initial Commit">
+      <created>1678362598430</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1678362598430</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -138,5 +124,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial Commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial Commit" />
   </component>
 </project>

@@ -1,10 +1,12 @@
-package main.java.org.example.logic;
+package org.example.logic;
 
 import main.java.org.example.logic.pieces.Piece;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.Math.pow;
+import static main.java.org.example.logic.Board.colourToMove;
 import static main.java.org.example.logic.Board.squares;
 import static main.java.org.example.logic.pieces.Piece.*;
 import static main.java.org.example.util.PrecomputedMoveData.directionOffsets;
@@ -12,21 +14,60 @@ import static main.java.org.example.util.PrecomputedMoveData.numSquaresToEdge;
 
 
 public class MoveGenerator {
-    private static final int friendlyColour = Board.colourToMove;
+    private static final int friendlyColour = colourToMove;
     private static final int opponentColour = Piece.getOppositeColour(friendlyColour);
     public static List<Move> moves;
-    private static long empty;
+    public static long empty;
+    public static long whitePawns;
+    public static long blackPawns;
+    public static long notWhite;
+    public static long notBlack;
 
-    public static List<Move> generateMoves() {
 
-        empty = 0;
+    static long notAFile = 0xFEFEFEFEFEFEFEFEL;
+    static long notABFile = 0xFCFCFCFCFCFCFCFCL;
+    static long notHFile = 0x7F7F7F7F7F7F7F7FL;
+    static long notGHFile = 0x3F3F3F3F3F3F3F3FL;
+
+    public static void generateBitboard(int colour) {
+        long notBitboard = 0;
+        long pawnBitboard = 0;
+
         for (int i = 0; i < 64; i++) {
-            if (squares[i] > 0) {
-                System.out.println(i + " = greater then");
-                empty += Math.pow(2, i);
+            int piece = squares[i];
+            if (!Piece.isColour(piece, colour)) {
+                int root = i == 63 ? -2 : 2;
+                if (Piece.isType(piece, PAWN)) {
+                    pawnBitboard += (long) pow(root, i);
+                }
+                notBitboard += (long) pow(root, i);
             }
         }
-        System.out.println(Long.toBinaryString(empty));
+
+        if (Piece.isColour(colour, WHITE)) {
+            notWhite = notBitboard;
+            whitePawns = pawnBitboard;
+            return;
+        }
+
+        if (Piece.isColour(colour, BLACK)) {
+            notBlack = notBitboard;
+            blackPawns = pawnBitboard;
+        }
+    }
+
+    public static List<Move> generateMoves() {
+        empty = 0;
+        whitePawns = 0;
+        blackPawns = 0;
+        notWhite = 0;
+        notBlack = 0;
+
+        generateBitboard(WHITE);
+        generateBitboard(BLACK);
+
+        empty = notWhite & notBlack;
+
 
         moves = new ArrayList<>();
         for (int startSquare = 0; startSquare < 64; startSquare++) {
@@ -46,7 +87,7 @@ public class MoveGenerator {
 
     private static void generateSlidingMoves(int startSquare, int piece) {
         int startDirIndex = Piece.isType(piece, BISHOP) ? 4 : 0;
-        int endDirIndex = Piece.isType(piece, Piece.ROOK) ? 4 : 8;
+        int endDirIndex = Piece.isType(piece, ROOK) ? 4 : 8;
         for (int directionIndex = startDirIndex; directionIndex < endDirIndex; directionIndex++) {
             for (int n = 0; n < numSquaresToEdge[startSquare][directionIndex]; n++) {
                 int targetSquare = startSquare + directionOffsets[directionIndex] * (n + 1);
@@ -64,18 +105,13 @@ public class MoveGenerator {
         }
     }
 
-    private static void generatePawnMoves(int startSquare) {}
+    private static void generatePawnMoves(int startSquare) {
+    }
 
     private static void generateKnightMoves(int startSquare) {
-        long notAFile = 0xFEFEFEFEFEFEFEFEL;
-        long notABFile = 0xFCFCFCFCFCFCFCFCL;
-        long notHFile = 0x7F7F7F7F7F7F7F7FL;
-        long notGHFile = 0x3F3F3F3F3F3F3F3FL;
         long[] possiblePosition = new long[8];
 
-        System.out.println("Position:" + startSquare);
-
-        long binStartSquare = (long) Math.pow(2, startSquare);
+        long binStartSquare = (long) pow(2, startSquare);
 
         possiblePosition[0] = ((binStartSquare << 17) & notAFile);
         possiblePosition[1] = ((binStartSquare << 10) & notABFile);
@@ -87,13 +123,20 @@ public class MoveGenerator {
         possiblePosition[7] = ((binStartSquare >> 17) & notHFile);
 
         for (long position : possiblePosition) {
-            long newPosition = (Long.numberOfTrailingZeros(position));
-//            System.out.println(newPosition);
-            moves.add(new Move(startSquare, (int) newPosition));
-//            System.out.println("\n\nReg old pos: " + startSquare);
-//            System.out.println("Old position: " + Long.numberOfTrailingZeros(binStartSquare) + 1);
-//            System.out.println("New position: " + newPosition);
+            long targetPosition = (Long.numberOfTrailingZeros(position));
+            moves.add(new Move(startSquare, (int) targetPosition));
         }
+    }
+
+    private long southOne(long b) {
+        return b >> 8;
+    }
+
+    private long northOne(long b) {
+        return b << 8;
+    }
+
+    private void singlePushPawns() {
     }
 
     public static class Move {

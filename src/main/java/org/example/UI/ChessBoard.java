@@ -1,8 +1,8 @@
-package main.java.org.example.UI;
+package org.example.UI;
 
 import main.java.org.example.logic.Board;
-import main.java.org.example.logic.MoveGenerator;
-import main.java.org.example.logic.MoveGenerator.Move;
+import org.example.logic.MoveGenerator;
+import org.example.logic.MoveGenerator.Move;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,7 @@ import java.util.Map;
 import static main.java.org.example.UI.Constants.*;
 import static main.java.org.example.logic.Board.squares;
 import static main.java.org.example.logic.pieces.Piece.*;
+import static org.example.logic.MoveGenerator.*;
 
 public class ChessBoard extends JPanel implements ActionListener {
 
@@ -73,13 +74,18 @@ public class ChessBoard extends JPanel implements ActionListener {
             for (int rank = 0; rank < CELLS; rank++) {
                 if ((file + rank) % 2 == 0) {
                     g2.setColor(Color.black);
-                    g2.fillRect(file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
 
-                    g2.setColor(Color.white);
-//                  String squareVal = String.valueOf((char) (72 - file)) + (rank + 1);
-//                  g2.drawString(squareVal, (file * CELL_SIZE) + 2, (rank * CELL_SIZE) + 12);
+                    g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
+
+                }
+                if (String.format("%64s",Long.toBinaryString(notBlack)).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
+                    g2.setColor(Color.red);
+
+                    g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
+
                 }
             }
+
         }
 
         // Draw selected square and pieces

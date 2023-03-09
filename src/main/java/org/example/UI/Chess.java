@@ -1,4 +1,4 @@
-package main.java.org.example.UI;
+package org.example.UI;
 
 import main.java.org.example.util.ByteUtil;
 
