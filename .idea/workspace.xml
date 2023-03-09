@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/Chess.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-bishop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-king.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-knight.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-pawn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-queen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/black-rook.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-bishop.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-king.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-knight.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-pawn.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-queen.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/assets/white-rook.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Position.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/Pawn.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/Piece.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/ByteUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/LoadUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/util/PrecomputedMoveData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/initial-board.fen" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/midgame-board.fen" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MacroExpansionManager">
+    <option name="directoryName" value="vywhrx3l" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="workspaceImportEnabled" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="2MgyGLY7pdCBUmv2f6bbssJbZsi" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "TEXT"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/org/example/assets" />
+      <recent name="$PROJECT_DIR$/src/main/java/org/example/assets/white" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/src/main/resources" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Run Chess" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="main.java.org.example.UI.Chess" />
+      <module name="ChessGame" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="" />
+      <created>1678203425519</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1678203425519</updated>
+      <workItem from="1678203426578" duration="42868000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
