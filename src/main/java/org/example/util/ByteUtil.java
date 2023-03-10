@@ -1,4 +1,4 @@
-package main.java.org.example.util;
+package org.example.util;
 
 public class ByteUtil {
     public static int getMsb(int n) {

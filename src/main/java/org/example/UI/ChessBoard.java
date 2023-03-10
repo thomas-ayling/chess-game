@@ -1,6 +1,6 @@
 package org.example.UI;
 
-import main.java.org.example.logic.Board;
+import org.example.logic.Board;
 import org.example.logic.MoveGenerator;
 import org.example.logic.MoveGenerator.Move;
 
@@ -16,9 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import static main.java.org.example.UI.Constants.*;
-import static main.java.org.example.logic.Board.squares;
-import static main.java.org.example.logic.pieces.Piece.*;
 import static org.example.logic.MoveGenerator.*;
+import static org.example.logic.pieces.Piece.*;
 
 public class ChessBoard extends JPanel implements ActionListener {
 
@@ -44,6 +43,8 @@ public class ChessBoard extends JPanel implements ActionListener {
 
     List<Move> selectedMoves = new ArrayList<>();
 
+    Board board;
+
     public ChessBoard() {
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
         setVisible(true);
@@ -51,11 +52,11 @@ public class ChessBoard extends JPanel implements ActionListener {
         setBackground(Color.lightGray);
         addMouseListener(new Adapter());
 
-        new Board();
+        board = new Board();
 
         selectedSquare = new boolean[64];
 
-        moves = MoveGenerator.generateMoves();
+        moves = board.getMoves();
 
         timer.start();
     }
@@ -63,29 +64,25 @@ public class ChessBoard extends JPanel implements ActionListener {
     public void setup() {
     }
 
-    public void drawBoard(Graphics g) {
+    public void drawBoard(Graphics g, int[] squares) {
         int offset = 12;
         int size = 50;
         Graphics2D g2 = (Graphics2D) g.create();
 
         // Draw board
         g2.setStroke(new java.awt.BasicStroke(3));
+        g2.setColor(Color.black);
         for (int file = 0; file < CELLS; file++) {
             for (int rank = 0; rank < CELLS; rank++) {
                 if ((file + rank) % 2 == 0) {
                     g2.setColor(Color.black);
-
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
-
                 }
-                if (String.format("%64s",Long.toBinaryString(notBlack)).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
-                    g2.setColor(Color.red);
-
-                    g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
-
-                }
+                if (String.format("%64s", Long.toBinaryString(board.getTaboo())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
+                  g2.setColor(Color.red);
+                  g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
+              }
             }
-
         }
 
         // Draw selected square and pieces
@@ -122,7 +119,7 @@ public class ChessBoard extends JPanel implements ActionListener {
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
         g.setColor(Color.black);
-        drawBoard(g);
+        drawBoard(g, board.getSquares());
     }
 
     public void move() {

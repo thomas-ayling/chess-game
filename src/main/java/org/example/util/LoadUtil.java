@@ -1,6 +1,6 @@
-package main.java.org.example.util;
+package org.example.util;
 
-import main.java.org.example.logic.pieces.Piece;
+import org.example.logic.pieces.Piece;
 
 import java.util.HashMap;
 import java.util.Map;

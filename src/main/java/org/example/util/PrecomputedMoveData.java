@@ -1,4 +1,4 @@
-package main.java.org.example.util;
+package org.example.util;
 
 public class PrecomputedMoveData {
     public static final int[] directionOffsets = {8, -8, -1, 1, 7, -7, 9, -9};

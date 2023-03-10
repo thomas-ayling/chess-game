@@ -1,7 +1,7 @@
-package main.java.org.example.logic.pieces;
+package org.example.logic.pieces;
 
-import static main.java.org.example.util.ByteUtil.getLsb;
-import static main.java.org.example.util.ByteUtil.getMsb;
+import static org.example.util.ByteUtil.getLsb;
+import static org.example.util.ByteUtil.getMsb;
 
 public class Piece {
     public static final int NONE = 0;

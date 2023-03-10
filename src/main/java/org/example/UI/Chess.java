@@ -1,6 +1,6 @@
 package org.example.UI;
 
-import main.java.org.example.util.ByteUtil;
+import org.example.util.ByteUtil;
 
 import javax.swing.*;
 import java.awt.*;
