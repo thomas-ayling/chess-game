@@ -23,6 +23,25 @@ public class Piece {
         return getLsb(piece) == type;
     }
 
+    public static String getType(int piece) {
+        switch (getLsb(piece)) {
+            case (1):
+                return "King";
+            case (2):
+                return "Pawn";
+            case (3):
+                return "Knight";
+            case (4):
+                return "Bishop";
+            case (5):
+                return "Rook";
+            case (6):
+                return "Queen";
+            default:
+                return null;
+        }
+    }
+
     public static boolean isSlidingPiece(int piece) {
         int pieceType = getLsb(piece);
         return pieceType == 4 || pieceType == 5 || pieceType == 6;

@@ -11,24 +11,26 @@ import static org.example.util.PrecomputedMoveData.directionOffsets;
 import static org.example.util.PrecomputedMoveData.numSquaresToEdge;
 
 public class MoveGenerator {
-    protected final long notAFile = 0xFEFEFEFEFEFEFEFEL;
-    protected final long notABFile = 0xFCFCFCFCFCFCFCFCL;
-    protected final long notHFile = 0x7F7F7F7F7F7F7F7FL;
-    protected final long notGHFile = 0x3F3F3F3F3F3F3F3FL;
-    protected final long rank4 = 0x00000000FF000000L;
-    protected final long rank5 = 0x000000FF00000000L;
-    protected long empty;
-    protected long whitePawns;
-    protected long blackPawns;
-    protected long notWhite;
-    protected long notBlack;
-    protected long notFriendlyPieces;
-    protected long taboo;
-    protected List<Move> moves;
-    protected int friendlyColour;
-    protected int opponentColour;
-    protected int[] squares;
-    protected long opponentMoves = 0;
+    private final long notAFile = 0xFEFEFEFEFEFEFEFEL;
+    private final long notABFile = 0xFCFCFCFCFCFCFCFCL;
+    private final long notHFile = 0x7F7F7F7F7F7F7F7FL;
+    private final long notGHFile = 0x3F3F3F3F3F3F3F3FL;
+    private final long rank4 = 0x00000000FF000000L;
+    private final long rank5 = 0x000000FF00000000L;
+    private long empty;
+    private long whitePawns;
+    private long blackPawns;
+    private long notWhite;
+    private long notBlack;
+    private long notFriendlyPieces;
+    private long taboo;
+    private long tabooXRay;
+    private List<Move> moves;
+    private List<Move> opponentMoves;
+    private int friendlyColour;
+    private int opponentColour;
+    private int[] squares;
+    private boolean opponent;
 
     protected static long northOne(long b) {
         return b << 8;
@@ -63,40 +65,28 @@ public class MoveGenerator {
     }
 
     public List<Move> generateMoves(Board board, boolean opponent) {
+        this.opponent = opponent;
+
         squares = board.getSquares();
 
         friendlyColour = opponent ? getOppositeColour(board.getColourToMove()) : board.getColourToMove();
         opponentColour = getOppositeColour(friendlyColour);
-
-        empty = 0;
-        whitePawns = 0;
-        blackPawns = 0;
-        notWhite = 0;
-        notBlack = 0;
-        taboo = 0;
-
-        generateBitboard(WHITE);
-        generateBitboard(BLACK);
-
-        generateTaboo(board, opponent);
-
-        notFriendlyPieces = friendlyColour == WHITE ? notWhite : notBlack;
-
-        empty = notWhite & notBlack;
-
         moves = new ArrayList<>();
+        opponentMoves = opponent ? new ArrayList<>() : new MoveGenerator().generateMoves(board, true);
+        generateBitboards();
+
 
         int kingPosition = -1;
 
         for (int startSquare = 0; startSquare < 64; startSquare++) {
             int piece = squares[startSquare];
+            if (Piece.isType(piece, BISHOP) || Piece.isType(piece, ROOK) || Piece.isType(piece, QUEEN)) {
+                generateSlidingMoves(startSquare, piece);
+                continue;
+            }
             if (Piece.isColour(piece, friendlyColour)) {
                 if (Piece.isType(piece, PAWN)) {
                     generatePawnMoves(startSquare);
-                }
-                if (Piece.isType(piece, BISHOP) || Piece.isType(piece, ROOK) || Piece.isType(piece, QUEEN)) {
-                    generateSlidingMoves(startSquare, piece);
-                    continue;
                 }
                 if (Piece.isType(piece, KNIGHT)) {
                     generateKnightMoves(startSquare);
@@ -106,8 +96,35 @@ public class MoveGenerator {
                 }
             }
         }
-        generateKingMoves(kingPosition, opponent);
+        generateKingMoves(kingPosition);
+        checkForChecks(kingPosition);
         return moves;
+    }
+
+    private void checkForChecks(int friendlyKingPosition) {
+        for (Move move : opponentMoves) {
+            System.out.printf("%s, %s\n", move.startSquare, move.targetSquare);
+            if (move.targetSquare == friendlyKingPosition) {
+                System.out.println("CHECK");
+            }
+        }
+    }
+
+    private void generateBitboards() {
+        empty = 0;
+        whitePawns = 0;
+        blackPawns = 0;
+        notWhite = 0;
+        notBlack = 0;
+        taboo = 0;
+        tabooXRay = 0;
+        generateBitboard(WHITE);
+        generateBitboard(BLACK);
+        notFriendlyPieces = friendlyColour == WHITE ? notWhite : notBlack;
+        empty = notWhite & notBlack;
+        if (!opponent) {
+            generateTaboo();
+        }
     }
 
     private void generateBitboard(int colour) {
@@ -138,32 +155,44 @@ public class MoveGenerator {
         }
     }
 
-    private void generateTaboo(Board board, boolean opponent) {
-        if (!opponent) {
-            List<Move> opponentMoves = new MoveGenerator().generateMoves(board, true);
-            for (Move move : opponentMoves) {
-                int root = move.targetSquare == 63 ? -2 : 2;
-                if (move.targetSquare != 64) {
-                    taboo |= (long) pow(root, move.targetSquare);
-                    printBin(taboo);
-                }
-            }
+    private void generateTaboo() {
+        for (Move move : opponentMoves) {
+            taboo = addBit(taboo, move.targetSquare);
         }
     }
 
+    private long addBit(long bitboard, int position) {
+        int root = position == 63 ? -2 : 2;
+        if (position != 64) {
+            return bitboard | (long) pow(root, position);
+        }
+        return bitboard;
+    }
+
     protected void generatePawnMoves(int startSquare) {
-        //todo: Generate pawn attacks when checking taboo
         long binStartSquare = (long) pow(2, startSquare);
+
+        // Taboo logic
+        if (opponent) {
+            long attacks = friendlyColour == WHITE ? (northEastOne(binStartSquare) | northWestOne(binStartSquare)) : (southEastOne(binStartSquare) | southWestOne(binStartSquare));
+            addPawnMoves(startSquare, attacks);
+            return;
+        }
+
         long singleTargets = friendlyColour == WHITE ? northOne(binStartSquare) & empty : southOne(binStartSquare) & empty;
-        long doubleTargets = friendlyColour == WHITE ? northOne(singleTargets) & empty & rank4 : southOne(binStartSquare) & empty & rank5;
-        long attacks = friendlyColour == WHITE ? (northEastOne(startSquare) | northWestOne(startSquare)) & ~notBlack : (southEastOne(startSquare) | southWestOne(startSquare)) & ~notWhite;
+        long doubleTargets = friendlyColour == WHITE ? northOne(singleTargets) & empty & rank4 : southOne(singleTargets) & empty & rank5;
+        long attacks = friendlyColour == WHITE ? (northEastOne(binStartSquare) | northWestOne(binStartSquare)) & ~notBlack : (southEastOne(binStartSquare) | southWestOne(binStartSquare)) & ~notWhite;
 
         long pawnTargets = singleTargets | doubleTargets | attacks;
+        addPawnMoves(startSquare, pawnTargets);
+    }
 
+
+    private void addPawnMoves(int startSquare, long pawnTargets) {
         for (int i = 0; i < 64; i++) {
             //If there is a bit switched on
             if (pawnTargets << ~i < 0) {
-                moves.add(new Move(startSquare, i));
+                addMove(startSquare, i);
             }
         }
     }
@@ -185,55 +214,59 @@ public class MoveGenerator {
 
         for (long position : possiblePosition) {
             long targetSquare = (Long.numberOfTrailingZeros(position & notFriendlyPieces));
-            moves.add(new Move(startSquare, (int) targetSquare));
+            addMove(startSquare, (int) targetSquare);
         }
     }
 
-    private void generateKingMoves(int startSquare, boolean opponent) {
+    private void generateKingMoves(int startSquare) {
         long binStartSquare = (long) pow(2, startSquare);
-
         long[] kingTargets = new long[8];
 
-        kingTargets[0] = northWestOne(binStartSquare) & notHFile;
+        kingTargets[0] = northWestOne(binStartSquare);
         kingTargets[1] = northOne(binStartSquare);
-        kingTargets[2] = northEastOne(binStartSquare) & notHFile;
-        kingTargets[3] = southEastOne(binStartSquare) & notHFile;
+        kingTargets[2] = northEastOne(binStartSquare);
+        kingTargets[3] = southEastOne(binStartSquare);
         kingTargets[4] = southOne(binStartSquare);
-        kingTargets[5] = southWestOne(binStartSquare) & notAFile;
-        kingTargets[6] = eastOne(binStartSquare) & notHFile;
-        kingTargets[7] = westOne(binStartSquare) & notHFile;
+        kingTargets[5] = southWestOne(binStartSquare);
+        kingTargets[6] = eastOne(binStartSquare);
+        kingTargets[7] = westOne(binStartSquare);
 
-        for (long target : kingTargets) {
+        for (long targetSquare : kingTargets) {
             if (!opponent) {
-                target &= ~taboo;
+                targetSquare &= ~taboo & notFriendlyPieces;
             }
-            target &= notBlack;
-
-            target = Long.numberOfTrailingZeros(target);
-            moves.add(new Move(startSquare, (int) target));
+            targetSquare = Long.numberOfTrailingZeros(targetSquare);
+            addMove(startSquare, (int) targetSquare);
         }
     }
 
-    private void printBin(long n) {
-        System.out.println(String.format("%64s", Long.toBinaryString(n)).replace(' ', '0'));
+    private void addMove(int start, int target) {
+        moves.add(new Move(start, target));
     }
 
     private void generateSlidingMoves(int startSquare, int piece) {
-        // todo: Fix sliding pieces when calculating taboo squares
         int startDirIndex = Piece.isType(piece, BISHOP) ? 4 : 0;
         int endDirIndex = Piece.isType(piece, ROOK) ? 4 : 8;
+        boolean moveBlocked;
         for (int directionIndex = startDirIndex; directionIndex < endDirIndex; directionIndex++) {
+            moveBlocked = false;
             for (int n = 0; n < numSquaresToEdge[startSquare][directionIndex]; n++) {
                 int targetSquare = startSquare + directionOffsets[directionIndex] * (n + 1);
                 int pieceOnTargetSquare = squares[targetSquare];
                 if (Piece.isColour(pieceOnTargetSquare, friendlyColour)) {
-                    break;
-                }
-                moves.add(new Move(startSquare, targetSquare));
-                if (Piece.isColour(pieceOnTargetSquare, opponentColour)) {
-                    if (Piece.isSlidingPiece(piece)) {
-                        break;
+                    if (opponent && !moveBlocked) {
+                        addMove(startSquare, targetSquare);
                     }
+                    moveBlocked = true;
+                }
+                if (!moveBlocked) {
+                    addMove(startSquare, targetSquare);
+                }
+                if (Piece.isColour(pieceOnTargetSquare, opponentColour)) {
+                    moveBlocked = true;
+                }
+                if (Piece.isColour(squares[startSquare], opponentColour) && !opponent) {
+                    tabooXRay = addBit(tabooXRay, targetSquare);
                 }
             }
         }
@@ -265,6 +298,10 @@ public class MoveGenerator {
 
     public long getTaboo() {
         return taboo;
+    }
+
+    public long getTabooXRay() {
+        return tabooXRay;
     }
 
     public static class Move {

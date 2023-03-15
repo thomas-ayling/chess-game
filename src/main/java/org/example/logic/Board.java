@@ -10,15 +10,19 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Math.pow;
+import static org.example.logic.pieces.Piece.*;
+
 public class Board {
     private int[] squares;
     private int colourToMove = Piece.BLACK;
     private List<Move> moves;
     private final MoveGenerator moveGenerator = new MoveGenerator();
 
+    private int friendlyKingPosition;
+
     public Board() {
         try {
-//            File fenFile = new File("src/main/resources/initial-board.fen");
             File fenFile = new File("src/main/resources/initial-board.fen");
             Scanner scanner = new Scanner(fenFile);
             String fenString = scanner.next();
@@ -28,12 +32,20 @@ public class Board {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        System.out.println(Arrays.toString(squares));
         moves = moveGenerator.generateMoves(this, false);
     }
 
-    public static void move() {
-
+    public void move(int startPos, int targetPos) {
+        int pieceToMove = squares[startPos];
+        int takenPiece = squares[targetPos];
+        squares[startPos] = 0;
+        squares[targetPos] = pieceToMove;
+        if (takenPiece > 0) {
+            //todo: remove piece on check
+            System.out.println(Piece.getType(takenPiece));
+        }
+        colourToMove = Piece.getOppositeColour(colourToMove);
+        moves = moveGenerator.generateMoves(this, false);
     }
 
     public int[] getSquares() {
@@ -48,7 +60,12 @@ public class Board {
         return moves;
     }
 
-    public long getTaboo() {
-        return moveGenerator.getTaboo();
+
+    public void setFriendlyKingPosition(int friendlyKingPosition) {
+        this.friendlyKingPosition = friendlyKingPosition;
+    }
+
+    public long getTabooXRay() {
+        return moveGenerator.getTabooXRay();
     }
 }

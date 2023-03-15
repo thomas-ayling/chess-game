@@ -1,8 +1,8 @@
 package org.example.UI;
 
 import org.example.logic.Board;
-import org.example.logic.MoveGenerator;
 import org.example.logic.MoveGenerator.Move;
+import org.example.logic.pieces.Piece;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,13 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 import static main.java.org.example.UI.Constants.*;
-import static org.example.logic.MoveGenerator.*;
 import static org.example.logic.pieces.Piece.*;
 
 public class ChessBoard extends JPanel implements ActionListener {
 
     private final Timer timer = new Timer(30, this);
-
     private final Map<Integer, Image> pieceMap = new HashMap<>() {{
         put(KING | WHITE, new ImageIcon("src/main/java/org/example/assets/white-king.png").getImage());
         put(PAWN | WHITE, new ImageIcon("src/main/java/org/example/assets/white-pawn.png").getImage());
@@ -37,13 +35,11 @@ public class ChessBoard extends JPanel implements ActionListener {
         put(ROOK | BLACK, new ImageIcon("src/main/java/org/example/assets/black-rook.png").getImage());
         put(QUEEN | BLACK, new ImageIcon("src/main/java/org/example/assets/black-queen.png").getImage());
     }};
-
-    boolean[] selectedSquare;
+    int selectedStartSquare;
     List<Move> moves;
-
     List<Move> selectedMoves = new ArrayList<>();
-
     Board board;
+    boolean pieceIsSelected = false;
 
     public ChessBoard() {
         setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
@@ -54,7 +50,7 @@ public class ChessBoard extends JPanel implements ActionListener {
 
         board = new Board();
 
-        selectedSquare = new boolean[64];
+        selectedStartSquare = -1;
 
         moves = board.getMoves();
 
@@ -78,10 +74,10 @@ public class ChessBoard extends JPanel implements ActionListener {
                     g2.setColor(Color.black);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }
-                if (String.format("%64s", Long.toBinaryString(board.getTaboo())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
-                  g2.setColor(Color.red);
-                  g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
-              }
+                if (String.format("%64s", Long.toBinaryString(board.getTabooXRay())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
+                    g2.setColor(Color.red);
+                    g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
+                }
             }
         }
 
@@ -90,7 +86,7 @@ public class ChessBoard extends JPanel implements ActionListener {
         for (int rank = 0; rank < CELLS; rank++) {
             for (int file = 0; file < CELLS; file++) {
                 int currentPosition = file + (rank * 8);
-                if (selectedSquare[currentPosition] && squares[currentPosition] != 0) {
+                if (selectedStartSquare == currentPosition && squares[currentPosition] != 0) {
                     g2.drawRect(file * CELL_SIZE, rank * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 }
                 if (squares[currentPosition] == 0) {
@@ -153,17 +149,37 @@ public class ChessBoard extends JPanel implements ActionListener {
             int mouseX = e.getX();
             int mouseY = e.getY();
             if (mouseX > BOARD_OFFSET && mouseX < BOARD_WIDTH + BOARD_OFFSET && mouseY > BOARD_OFFSET && mouseY < BOARD_HEIGHT + BOARD_OFFSET) {
-                selectedSquare = new boolean[64];
                 int file = Math.floorDiv(mouseX - BOARD_OFFSET, CELL_SIZE);
                 int rank = Math.floorDiv(mouseY - BOARD_OFFSET, CELL_SIZE);
-                selectedSquare[(rank * 8) + file] = true;
-                selectedMoves = new ArrayList<>();
-                for (Move move : moves) {
-                    if (move.startSquare == (rank * 8) + file) {
-                        selectedMoves.add(move);
+                if (pieceIsSelected) {
+                    int selectedTargetSquare = (rank * 8) + file;
+                    for (Move move : moves) {
+                        if (move.startSquare == selectedStartSquare && move.targetSquare == selectedTargetSquare) {
+                            board.move(move.startSquare, move.targetSquare);
+                            pieceIsSelected = false;
+                            selectedStartSquare = -1;
+                            selectedMoves = new ArrayList<>();
+                            moves = board.getMoves();
+                            return;
+                        }
                     }
                 }
+
+//                System.out.println("MOUSE RELEASED");
+
+                selectedStartSquare = (rank * 8) + file;
+                if (Piece.isColour(board.getSquares()[selectedStartSquare], board.getColourToMove())) {
+                    selectedMoves = new ArrayList<>();
+                    for (Move move : moves) {
+                        if (move.startSquare == selectedStartSquare) {
+                            selectedMoves.add(move);
+                        }
+                    }
+                    pieceIsSelected = true;
+                    return;
+                }
             }
+            pieceIsSelected = false;
         }
 
         @Override
