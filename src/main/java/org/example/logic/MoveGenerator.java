@@ -105,12 +105,10 @@ public class MoveGenerator {
         return moves;
     }
 
-    private void checkForChecks(int friendlyKingPosition) {
-        for (Move move : opponentMoves) {
-            System.out.printf("%s, %s\n", move.startSquare, move.targetSquare);
-            if (move.targetSquare == friendlyKingPosition) {
-                System.out.println("CHECK");
-            }
+    private void checkForChecks(int kingPosition) {
+        long kingPositionBitboard = addBit(0, kingPosition);
+        if ((kingPositionBitboard & taboo) >= 1) {
+            System.out.println("CHECK");
         }
     }
 
@@ -163,7 +161,7 @@ public class MoveGenerator {
         }
         return bitboard;
     }
-    
+
     private void generatePawnMoves(int startSquare, boolean friendly) {
         long binStartSquare = (long) pow(2, startSquare);
 
