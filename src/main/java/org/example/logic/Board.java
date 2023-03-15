@@ -6,12 +6,8 @@ import org.example.logic.MoveGenerator.Move;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
-import static java.lang.Math.pow;
-import static org.example.logic.pieces.Piece.*;
 
 public class Board {
     private int[] squares;
