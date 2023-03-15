@@ -190,7 +190,6 @@ public class MoveGenerator {
     }
 
     private void generateKnightMoves(int startSquare, boolean friendly) {
-        // todo: We can probably avoid a lot of unnecessary processing if we do checks about 'friendly pieces' here before calculating
         long[] possiblePosition = new long[8];
 
         long binStartSquare = (long) pow(2, startSquare);
