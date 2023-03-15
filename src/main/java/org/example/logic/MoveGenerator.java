@@ -30,35 +30,35 @@ public class MoveGenerator {
     private int opponentColour;
     private int[] squares;
 
-    protected static long northOne(long b) {
+    private static long northOne(long b) {
         return b << 8;
     }
 
-    protected long northEastOne(long b) {
+    private long northEastOne(long b) {
         return (b << 9) & notAFile;
     }
 
-    protected long eastOne(long b) {
+    private long eastOne(long b) {
         return (b << 1) & notAFile;
     }
 
-    protected long southEastOne(long b) {
+    private long southEastOne(long b) {
         return (b >> 7) & notAFile;
     }
 
-    protected long southOne(long b) {
+    private long southOne(long b) {
         return b >> 8;
     }
 
-    protected long southWestOne(long b) {
+    private long southWestOne(long b) {
         return (b >> 9) & notHFile;
     }
 
-    protected long westOne(long b) {
+    private long westOne(long b) {
         return (b >> 1) & notHFile;
     }
 
-    protected long northWestOne(long b) {
+    private long northWestOne(long b) {
         return (b << 7) & notHFile;
     }
 
