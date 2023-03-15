@@ -15,8 +15,6 @@ public class Board {
     private List<Move> moves;
     private final MoveGenerator moveGenerator = new MoveGenerator();
 
-    private int friendlyKingPosition;
-
     public Board() {
         try {
             File fenFile = new File("src/main/resources/initial-board.fen");
@@ -28,7 +26,7 @@ public class Board {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-        moves = moveGenerator.generateMoves(this, false);
+        moves = moveGenerator.generateMoves(this);
     }
 
     public void move(int startPos, int targetPos) {
@@ -41,7 +39,7 @@ public class Board {
             System.out.println(Piece.getType(takenPiece));
         }
         colourToMove = Piece.getOppositeColour(colourToMove);
-        moves = moveGenerator.generateMoves(this, false);
+        moves = moveGenerator.generateMoves(this);
     }
 
     public int[] getSquares() {
@@ -56,12 +54,10 @@ public class Board {
         return moves;
     }
 
-
-    public void setFriendlyKingPosition(int friendlyKingPosition) {
-        this.friendlyKingPosition = friendlyKingPosition;
-    }
-
     public long getTabooXRay() {
         return moveGenerator.getTabooXRay();
+    }
+    public long getTaboo() {
+        return moveGenerator.getTaboo();
     }
 }
