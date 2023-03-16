@@ -12,16 +12,9 @@ import static org.example.util.PrecomputedMoveData.numSquaresToEdge;
 
 public class MoveGenerator {
     private final long notAFile = 0xFEFEFEFEFEFEFEFEL;
-    private final long notABFile = 0xFCFCFCFCFCFCFCFCL;
     private final long notHFile = 0x7F7F7F7F7F7F7F7FL;
-    private final long notGHFile = 0x3F3F3F3F3F3F3F3FL;
-    private final long rank4 = 0x00000000FF000000L;
-    private final long rank5 = 0x000000FF00000000L;
     private long pinnedPieces = 0;
-    private long pinningPieces = 0;
     private long empty;
-    private long whitePawns;
-    private long blackPawns;
     private long notWhite;
     private long notBlack;
     private long notFriendlyPieces;
@@ -136,7 +129,7 @@ public class MoveGenerator {
             if (isType(pinnedPiece, PAWN)) {
                 List<Move> movesToRemove = new ArrayList<>();
                 for (Move move : moves) {
-                    // if (positions is not start of a possible move) or (move attacks the pinning piece) then continue, otherwise remove the move
+                    // if (positions is not start of a possible move) or (move attacks the pinning piece) then check next move, otherwise remove the move
                     if (move.startSquare != position || directionOffsets[directionToPinningPiece] == move.targetSquare - move.startSquare) {
                         continue;
                     }
@@ -247,8 +240,6 @@ public class MoveGenerator {
         moves = new ArrayList<>();
         // Reset bitboards
         empty = 0;
-        whitePawns = 0;
-        blackPawns = 0;
         notWhite = 0;
         notBlack = 0;
         taboo = 0;
@@ -265,15 +256,11 @@ public class MoveGenerator {
 
     private void generateBitboard(int colour) {
         long notBitboard = 0;
-        long pawnBitboard = 0;
 
         for (int i = 0; i < 64; i++) {
             int piece = squares[i];
             int root = i == 63 ? -2 : 2;
             if (isColour(piece, colour)) {
-                if (isType(piece, PAWN)) {
-                    pawnBitboard += (long) pow(root, i);
-                }
                 continue;
             }
             notBitboard += (long) pow(root, i);
@@ -281,13 +268,11 @@ public class MoveGenerator {
 
         if (isColour(colour, WHITE)) {
             notWhite = notBitboard;
-            whitePawns = pawnBitboard;
             return;
         }
 
         if (isColour(colour, BLACK)) {
             notBlack = notBitboard;
-            blackPawns = pawnBitboard;
         }
     }
 
@@ -343,6 +328,9 @@ public class MoveGenerator {
     }
 
     private void generatePawnMoves(int startSquare, boolean friendly) {
+        long rank4 = 0x00000000FF000000L;
+        long rank5 = 0x000000FF00000000L;
+
         long binStartSquare = (long) pow(2, startSquare);
 
         // Taboo logic
@@ -370,6 +358,9 @@ public class MoveGenerator {
     }
 
     private void generateKnightMoves(int startSquare, boolean friendly) {
+        long notABFile = 0xFCFCFCFCFCFCFCFCL;
+        long notGHFile = 0x3F3F3F3F3F3F3F3FL;
+
         long[] possiblePosition = new long[8];
 
         long binStartSquare = (long) pow(2, startSquare);
@@ -483,38 +474,11 @@ public class MoveGenerator {
             positions.add(getPositionFromBitboard(bitboard));
             bitboard = subBit(bitboard, positions.get(positions.size() - 1));
         }
-        if (bitboard < 0) {
-            System.out.println("NEGATIVE!!!");
-        }
         return positions;
     }
 
     private void addMove(int start, int target) {
         moves.add(new Move(start, target));
-    }
-
-    public long getEmpty() {
-        return empty;
-    }
-
-    public long getWhitePawns() {
-        return whitePawns;
-    }
-
-    public long getBlackPawns() {
-        return blackPawns;
-    }
-
-    public long getNotWhite() {
-        return notWhite;
-    }
-
-    public long getNotBlack() {
-        return notBlack;
-    }
-
-    public long getNotFriendlyPieces() {
-        return notFriendlyPieces;
     }
 
     public long getPinned() {
