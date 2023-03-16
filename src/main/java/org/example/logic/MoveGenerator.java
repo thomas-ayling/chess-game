@@ -216,32 +216,28 @@ public class MoveGenerator {
     }
 
     private int getOppositeDirection(int direction) {
-        if (direction == 0) {
-            return 1;
+        switch (direction) {
+            case 0:
+                return 1;
+            case 1:
+                return 0;
+            case 2:
+                return 3;
+            case 3:
+                return 2;
+            case 4:
+                return 5;
+            case 5:
+                return 4;
+            case 6:
+                return 7;
+            case 7:
+                return 6;
+            default:
+                // TODO: Change for logger
+                System.out.println("There was an error in opposite direction method");
+                return -1;
         }
-        if (direction == 1) {
-            return 0;
-        }
-        if (direction == 2) {
-            return 3;
-        }
-        if (direction == 3) {
-            return 2;
-        }
-        if (direction == 4) {
-            return 5;
-        }
-        if (direction == 5) {
-            return 4;
-        }
-        if (direction == 6) {
-            return 7;
-        }
-        if (direction == 7) {
-            return 6;
-        }
-        System.out.println("There was an error in opposite direction method");
-        return -1;
     }
 
     private void resetVariables(Board board) {
