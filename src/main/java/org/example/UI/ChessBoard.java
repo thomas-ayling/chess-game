@@ -74,7 +74,7 @@ public class ChessBoard extends JPanel implements ActionListener {
                     g2.setColor(Color.black);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }
-                if (String.format("%64s", Long.toBinaryString(board.getTabooXRay())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
+                if (String.format("%64s", Long.toBinaryString(board.getPinned())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
                     g2.setColor(Color.red);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }

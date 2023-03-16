@@ -17,7 +17,7 @@ public class Board {
 
     public Board() {
         try {
-            File fenFile = new File("src/main/resources/initial-board.fen");
+            File fenFile = new File("src/main/resources/pinned-piece-board.fen");
             Scanner scanner = new Scanner(fenFile);
             String fenString = scanner.next();
             squares = LoadUtil.LoadBoardFromFen(fenString);
@@ -54,6 +54,9 @@ public class Board {
         return moves;
     }
 
+    public long getPinned() {
+        return moveGenerator.getPinned();
+    }
     public long getTabooXRay() {
         return moveGenerator.getTabooXRay();
     }

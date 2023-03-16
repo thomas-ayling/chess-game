@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Added more moves. Making this commit in case I break everything">
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="todo completed">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/pinned-piece-board.fen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
     </list>
@@ -98,7 +100,7 @@
       <updated>1678203425519</updated>
       <workItem from="1678203426578" duration="46030000" />
       <workItem from="1678365873002" duration="41141000" />
-      <workItem from="1678716328440" duration="32568000" />
+      <workItem from="1678716328440" duration="48321000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -128,7 +130,56 @@
       <option name="project" value="LOCAL" />
       <updated>1678877551380</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Simplified taboo gen logic">
+      <created>1678887834593</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1678887834593</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Changed access modifiers">
+      <created>1678887907608</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1678887907608</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Simplified check check logic">
+      <created>1678887936526</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1678887936526</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Removed unnecessary imports">
+      <created>1678887961096</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1678887961096</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Fixes to match move gen">
+      <created>1678887998934</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1678887998934</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Automatic change">
+      <created>1678888008246</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1678888008246</updated>
+    </task>
+    <task id="LOCAL-00011" summary="todo completed">
+      <created>1678888145850</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1678888145850</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -150,6 +201,14 @@
     <MESSAGE value="Added knight moves" />
     <MESSAGE value="Added king moves" />
     <MESSAGE value="Added more moves. Making this commit in case I break everything" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added more moves. Making this commit in case I break everything" />
+    <MESSAGE value="Simplified taboo gen logic" />
+    <MESSAGE value="Changed access modifiers" />
+    <MESSAGE value="Simplified check check logic" />
+    <MESSAGE value="Removed unnecessary imports" />
+    <MESSAGE value="Fixes" />
+    <MESSAGE value="Fixes to match move gen" />
+    <MESSAGE value="Automatic change" />
+    <MESSAGE value="todo completed" />
+    <option name="LAST_COMMIT_MESSAGE" value="todo completed" />
   </component>
 </project>
