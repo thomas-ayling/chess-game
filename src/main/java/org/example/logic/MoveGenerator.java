@@ -119,13 +119,13 @@ public class MoveGenerator {
             int directionToPinningPiece = getOppositeDirection(directionToKing);
 
             int distanceToKing = (int) sqrt(pow(xDist, 2) + pow(yDist, 2));
-            if (isType(pinnedPiece, ROOK)) {
-                System.out.println(xDist);
-                System.out.println(yDist);
-                System.out.println(directionToKing);
-                System.out.println(directionToPinningPiece);
-                System.out.println(distanceToKing);
-            }
+//            if (isType(pinnedPiece, BISHOP)) {
+//                System.out.println(xDist);
+//                System.out.println(yDist);
+//                System.out.println(directionToKing);
+//                System.out.println(directionToPinningPiece);
+//                System.out.println(distanceToKing);
+//            }
 
             for (Move move : moves) {
                 if (move.startSquare == position) {
