@@ -113,7 +113,7 @@ public class MoveGenerator {
             //
 
             int xDist = (kingPosition % 8) - (position % 8);
-            int yDist = (int) (floor(kingPosition) - floor(position));
+            int yDist = (int) (floor(kingPosition / 8f) - floor(position / 8f));
 
             int directionToKing = getDirectionToKing(xDist, yDist);
             int directionToPinningPiece = getOppositeDirection(directionToKing);
@@ -162,8 +162,8 @@ public class MoveGenerator {
 
         //TODO: PAWNS CAN ONLY MOVE WHEN PINNED IF THEY ATTACK IN A DIRECTION THAT WILL KEEP THE KING OUT OF CHECK
         // EG TAKING AN ENEMY QUEEN THAT IS ON THE OPPOSITE SIDE OF THE PAWN AS THE FRIENDLY KING.
-        // QUEENS CAN MOVE IF PINNED
-        // KNIGHTS CANNOT MOVE IF PINNED
+        // QUEENS CAN MOVE IF PINNED.
+        // KNIGHTS CANNOT MOVE IF PINNED.
         // IMPLEMENT THIS.
     }
 
