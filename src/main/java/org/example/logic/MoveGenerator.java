@@ -112,8 +112,8 @@ public class MoveGenerator {
             // north = 0, north east = 1 etc...
             //
 
-            int xDist = (kingPosition % 8) - (position % 8);
-            int yDist = (int) (floor(kingPosition / 8f) - floor(position / 8f));
+            int xDist = (position % 8) - (kingPosition % 8);
+            int yDist = (int) ((int) floor(position / 8f) - floor(kingPosition / 8f));
 
             int directionToKing = getDirectionToKing(xDist, yDist);
             int directionToPinningPiece = getOppositeDirection(directionToKing);
@@ -167,37 +167,68 @@ public class MoveGenerator {
         // IMPLEMENT THIS.
     }
 
+    /**
+     * @param xDist the x distance between pinned piece and king.
+     * @param yDist the y distance between pinned piece and king.
+     * @return an index referring to the direction offsets as defined in PrecomputedMoveData.
+     * @see org.example.util.PrecomputedMoveData
+     */
     private int getDirectionToKing(int xDist, int yDist) {
         if (xDist == 0 && yDist > 0) {
             return 0; // North
         }
-        if (xDist < 0 && yDist > 0) {
-            return 1; // North East
-        }
-        if (xDist < 0 && yDist == 0) {
-            return 2; // East
-        }
-        if (xDist < 0 && yDist < 0) {
-            return 3; // South East
-        }
         if (xDist == 0 && yDist < 0) {
-            return 4; // South
-        }
-        if (xDist > 0 && yDist < 0) {
-            return 5; // South West
+            return 1; // South
         }
         if (xDist > 0 && yDist == 0) {
-            return 6; // West
+            return 2; // East
+        }
+        if (xDist < 0 && yDist == 0) {
+            return 3; // West
+        }
+        if (xDist > 0 && yDist < 0) {
+            return 4; // South East
+        }
+        if (xDist < 0 && yDist > 0) {
+            return 5; // North West
+        }
+        if (xDist < 0 && yDist < 0) {
+            return 6; // South West
         }
         if (xDist > 0 && yDist > 0) {
-            return 7; // North West
+            return 7; // North East
         }
-        System.out.println("There was an error in direction to king function");
+        System.out.println("There was an error in direction to king method");
         return -1;
     }
 
     private int getOppositeDirection(int direction) {
-        return (direction + 4) % 8;
+        if (direction == 0) {
+            return 1;
+        }
+        if (direction == 1) {
+            return 0;
+        }
+        if (direction == 2) {
+            return 3;
+        }
+        if (direction == 3) {
+            return 2;
+        }
+        if (direction == 4) {
+            return 5;
+        }
+        if (direction == 5) {
+            return 4;
+        }
+        if (direction == 6) {
+            return 7;
+        }
+        if (direction == 7) {
+            return 6;
+        }
+        System.out.println("There was an error in opposite direction method");
+        return -1;
     }
 
     private void resetVariables(Board board) {
