@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="todo completed">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/pinned-piece-board.fen" afterDir="false" />
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Will compile - fixed direction logic">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/PrecomputedMoveData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/PrecomputedMoveData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,7 +99,7 @@
       <updated>1678203425519</updated>
       <workItem from="1678203426578" duration="46030000" />
       <workItem from="1678365873002" duration="41141000" />
-      <workItem from="1678716328440" duration="48321000" />
+      <workItem from="1678716328440" duration="51797000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -179,7 +178,21 @@
       <option name="project" value="LOCAL" />
       <updated>1678888145850</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Won't compile - array out of bounds error on ln 140 Move Generator">
+      <created>1678959195746</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1678959195746</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Will compile - fixed direction logic">
+      <created>1678959398385</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1678959398385</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,6 +222,9 @@
     <MESSAGE value="Fixes to match move gen" />
     <MESSAGE value="Automatic change" />
     <MESSAGE value="todo completed" />
-    <option name="LAST_COMMIT_MESSAGE" value="todo completed" />
+    <MESSAGE value="Won't compie - array out of bounds error on ln 140 Move Generator" />
+    <MESSAGE value="Won't compile - array out of bounds error on ln 140 Move Generator" />
+    <MESSAGE value="Will compile - fixed direction logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Will compile - fixed direction logic" />
   </component>
 </project>
