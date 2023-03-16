@@ -97,20 +97,33 @@ public class MoveGenerator {
             generateKingMoves(kingPosition, friendly);
         }
         checkKingLegality(kingPosition);
-        calculateLegalMoves(kingPosition);
+        generateLegalMoves(kingPosition);
         return moves;
     }
 
-    private void calculateLegalMoves(int kingPosition) {
+    private void removeMoves(int position) {
+        List<Move> movesToRemove = new ArrayList<>();
+
+        for (Move move : moves) {
+            if (move.startSquare == position) {
+                movesToRemove.add(move);
+            }
+        }
+        moves.removeAll(movesToRemove);
+    }
+
+    private void generateLegalMoves(int kingPosition) {
         List<Integer> pinnedPiecePositions = getPositionsFromBitboard(pinnedPieces);
 
-        List<Move> movesToRemove = new ArrayList<>();
 
         for (int position : pinnedPiecePositions) {
             int pinnedPiece = squares[position];
 
-            // north = 0, north east = 1 etc...
-            //
+
+            // If a knight is pinned it cannot move, so we move on to the next pinned piece if any
+            if (isType(pinnedPiece, KNIGHT)) {
+                continue;
+            }
 
             int xDist = (position % 8) - (kingPosition % 8);
             int yDist = (int) ((int) floor(position / 8f) - floor(kingPosition / 8f));
@@ -119,20 +132,30 @@ public class MoveGenerator {
             int directionToPinningPiece = getOppositeDirection(directionToKing);
 
             int distanceToKing = (int) sqrt(pow(xDist, 2) + pow(yDist, 2));
-//            if (isType(pinnedPiece, BISHOP)) {
-//                System.out.println(xDist);
-//                System.out.println(yDist);
-//                System.out.println(directionToKing);
-//                System.out.println(directionToPinningPiece);
-//                System.out.println(distanceToKing);
-//            }
 
-            for (Move move : moves) {
-                if (move.startSquare == position) {
+            if (isType(pinnedPiece, PAWN)) {
+                List<Move> movesToRemove = new ArrayList<>();
+                for (Move move : moves) {
+                    // if (positions is not start of a possible move) or (move attacks the pinning piece) then continue, otherwise remove the move
+                    if (move.startSquare != position || directionOffsets[directionToPinningPiece] == move.targetSquare - move.startSquare) {
+                        continue;
+                    }
                     movesToRemove.add(move);
                 }
+                moves.removeAll(movesToRemove);
+                continue;
             }
 
+            removeMoves(position);
+
+            // Rooks cannot move diagonally so if the direction index is greater than 3 (meaning a diagonal move) we move on to the next pinned piece if any
+            if (isType(pinnedPiece, ROOK) && directionToKing > 3) {
+                continue;
+            }
+            // Bishops cannot move orthogonally so if the direction index is less than 4 (meaning an orthogonal move) we move on to the next pinned piece if any
+            if (isType(pinnedPiece, BISHOP) && directionToKing < 4) {
+                continue;
+            }
 
             // First, calculate moves to king
             for (int n = 0; n < distanceToKing; n++) {
@@ -145,26 +168,15 @@ public class MoveGenerator {
                 break;
             }
             // Then, calculate moves to pinning piece
-            boolean moveBlocked = false;
             for (int n = 0; n < numSquaresToEdge[position][directionToPinningPiece]; n++) {
                 int targetSquare = position + directionOffsets[directionToPinningPiece] * (n + 1);
                 int pieceOnTargetSquare = squares[targetSquare];
+                addMove(position, targetSquare);
                 if (pieceOnTargetSquare > 0) {
                     break;
                 }
-                addMove(position, targetSquare);
             }
         }
-
-        moves.removeAll(movesToRemove);
-
-        System.out.println(pinnedPiecePositions);
-
-        //TODO: PAWNS CAN ONLY MOVE WHEN PINNED IF THEY ATTACK IN A DIRECTION THAT WILL KEEP THE KING OUT OF CHECK
-        // EG TAKING AN ENEMY QUEEN THAT IS ON THE OPPOSITE SIDE OF THE PAWN AS THE FRIENDLY KING.
-        // QUEENS CAN MOVE IF PINNED.
-        // KNIGHTS CANNOT MOVE IF PINNED.
-        // IMPLEMENT THIS.
     }
 
     /**
@@ -198,6 +210,7 @@ public class MoveGenerator {
         if (xDist > 0 && yDist > 0) {
             return 7; // North East
         }
+        // TODO: Change for logger
         System.out.println("There was an error in direction to king method");
         return -1;
     }
@@ -329,6 +342,10 @@ public class MoveGenerator {
         }
     }
 
+    private long generatePawnAttacks(long binStartSquare) {
+        return friendlyColour == WHITE ? (northEastOne(binStartSquare) | northWestOne(binStartSquare)) & ~notBlack : (southEastOne(binStartSquare) | southWestOne(binStartSquare)) & ~notWhite;
+    }
+
     private void generatePawnMoves(int startSquare, boolean friendly) {
         long binStartSquare = (long) pow(2, startSquare);
 
@@ -341,7 +358,7 @@ public class MoveGenerator {
 
         long singleTargets = friendlyColour == WHITE ? northOne(binStartSquare) & empty : southOne(binStartSquare) & empty;
         long doubleTargets = friendlyColour == WHITE ? northOne(singleTargets) & empty & rank4 : southOne(singleTargets) & empty & rank5;
-        long attacks = friendlyColour == WHITE ? (northEastOne(binStartSquare) | northWestOne(binStartSquare)) & ~notBlack : (southEastOne(binStartSquare) | southWestOne(binStartSquare)) & ~notWhite;
+        long attacks = generatePawnAttacks(binStartSquare);
 
         long pawnTargets = singleTargets | doubleTargets | attacks;
         addPawnMoves(startSquare, pawnTargets);
