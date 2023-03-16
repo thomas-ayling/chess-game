@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Pinned piece logic is complete">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Automatic changes">
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/pinned-piece-board.fen" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pinned-piece-board.fen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +96,7 @@
       <updated>1678203425519</updated>
       <workItem from="1678203426578" duration="46030000" />
       <workItem from="1678365873002" duration="41141000" />
-      <workItem from="1678716328440" duration="55774000" />
+      <workItem from="1678716328440" duration="56372000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -226,7 +224,28 @@
       <option name="project" value="LOCAL" />
       <updated>1678962747688</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Code cleanup">
+      <created>1678966944103</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1678966944104</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Changed getOppositeDirection logic to switch case over if statements">
+      <created>1678966974796</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1678966974796</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Automatic changes">
+      <created>1678967000711</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1678967000711</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -260,11 +279,13 @@
     <MESSAGE value="Won't compile - array out of bounds error on ln 140 Move Generator" />
     <MESSAGE value="Will compile - fixed direction logic" />
     <MESSAGE value="Added comment for clarity" />
-    <MESSAGE value="Automatic changes" />
     <MESSAGE value="Fixed pinned move gen logic" />
     <MESSAGE value="Commented out debugging" />
     <MESSAGE value="Fixed board drawing" />
     <MESSAGE value="Pinned piece logic is complete" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pinned piece logic is complete" />
+    <MESSAGE value="Code cleanup" />
+    <MESSAGE value="Changed getOppositeDirection logic to switch case over if statements" />
+    <MESSAGE value="Automatic changes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Automatic changes" />
   </component>
 </project>
