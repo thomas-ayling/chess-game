@@ -60,17 +60,16 @@ public class ChessBoard extends JPanel implements ActionListener {
     public void setup() {
     }
 
-    public void drawBoard(Graphics g, int[] squares) {
+    public void drawBoard(Graphics2D g2, int[] squares) {
         int offset = 12;
         int size = 50;
-        Graphics2D g2 = (Graphics2D) g.create();
 
         // Draw board
         g2.setStroke(new java.awt.BasicStroke(3));
         g2.setColor(Color.black);
         for (int file = 0; file < CELLS; file++) {
             for (int rank = 0; rank < CELLS; rank++) {
-                if ((file + rank) % 2 == 0) {
+                if ((file + rank) % 2 == 1) {
                     g2.setColor(Color.black);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }
@@ -111,11 +110,14 @@ public class ChessBoard extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
-        g.translate(BOARD_OFFSET, BOARD_OFFSET);
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
-        g.setColor(Color.black);
-        drawBoard(g, board.getSquares());
+        Graphics2D g2 = (Graphics2D) g.create();
+
+        g2.translate(BOARD_OFFSET, BOARD_OFFSET);
+//        g2.rotate(Math.toRadians(180));
+        g2.setColor(Color.WHITE);
+        g2.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
+        g2.setColor(Color.black);
+        drawBoard(g2, board.getSquares());
     }
 
     public void move() {
