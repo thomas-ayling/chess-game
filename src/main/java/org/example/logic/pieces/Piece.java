@@ -51,4 +51,7 @@ public class Piece {
         return colour == WHITE ? BLACK : WHITE;
     }
 
+    public static String getColour(int colour) {
+        return colour == WHITE ? "WHITE" : "BLACK";
+    }
 }
