@@ -4,8 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Automatic changes">
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Switched to logger">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/pieces/Piece.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/util/LoadUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/util/LoadUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/initial-board.fen" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/initial-board.fen" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/pinned-piece-board.fen" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/pinned-piece-board.fen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +104,8 @@
       <updated>1678203425519</updated>
       <workItem from="1678203426578" duration="46030000" />
       <workItem from="1678365873002" duration="41141000" />
-      <workItem from="1678716328440" duration="56372000" />
+      <workItem from="1678716328440" duration="66169000" />
+      <workItem from="1678985389059" duration="9573000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -245,7 +254,28 @@
       <option name="project" value="LOCAL" />
       <updated>1678967000711</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Automatic changes">
+      <created>1678967301991</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1678967301991</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Fixing code warnings">
+      <created>1678967378267</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1678967378267</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Switched to logger">
+      <created>1679047512452</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1679047512452</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -286,6 +316,8 @@
     <MESSAGE value="Code cleanup" />
     <MESSAGE value="Changed getOppositeDirection logic to switch case over if statements" />
     <MESSAGE value="Automatic changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Automatic changes" />
+    <MESSAGE value="Fixing code warnings" />
+    <MESSAGE value="Switched to logger" />
+    <option name="LAST_COMMIT_MESSAGE" value="Switched to logger" />
   </component>
 </project>
