@@ -25,36 +25,36 @@ public class MoveGenerator {
     private int opponentColour;
     private int[] squares;
 
-    private static long northOne(long b) {
-        return b << 8;
+    private static long northOne(long bit) {
+        return bit << 8;
     }
 
-    private long northEastOne(long b) {
-        return (b << 9) & notAFile;
+    private long northEastOne(long bit) {
+        return (bit << 9) & notAFile;
     }
 
-    private long eastOne(long b) {
-        return (b << 1) & notAFile;
+    private long eastOne(long bit) {
+        return (bit << 1) & notAFile;
     }
 
-    private long southEastOne(long b) {
-        return (b >> 7) & notAFile;
+    private long southEastOne(long bit) {
+        return (bit >> 7) & notAFile;
     }
 
-    private long southOne(long b) {
-        return b >> 8;
+    private long southOne(long bit) {
+        return bit >> 8;
     }
 
-    private long southWestOne(long b) {
-        return (b >> 9) & notHFile;
+    private long southWestOne(long bit) {
+        return (bit >> 9) & notHFile;
     }
 
-    private long westOne(long b) {
-        return (b >> 1) & notHFile;
+    private long westOne(long bit) {
+        return (bit >> 1) & notHFile;
     }
 
-    private long northWestOne(long b) {
-        return (b << 7) & notHFile;
+    private long northWestOne(long bit) {
+        return (bit << 7) & notHFile;
     }
 
     public List<Move> generateMoves(Board board) {
