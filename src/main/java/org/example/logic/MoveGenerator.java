@@ -286,9 +286,6 @@ public class MoveGenerator {
         check = (kingPositionBitboard & taboo) >= 1;
         if (check) {
             moves = getRemainingLegalMoves();
-            for (Move move : moves) {
-                System.out.printf("%s, %s\n", move.startSquare, move.targetSquare);
-            }
             if (moves.size() == 0) {
                 System.out.println("CHECKMATE");
             }
