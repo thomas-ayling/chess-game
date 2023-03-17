@@ -44,6 +44,6 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public Board addTurn(Turn request) throws TurnException {
-        return null;
+        return new Board();
     }
 }
