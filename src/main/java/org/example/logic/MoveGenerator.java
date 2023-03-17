@@ -72,16 +72,6 @@ public class MoveGenerator {
         boolean friendly;
         for (int i = 0; i < 2; i++) {
             friendly = i != 0;
-            for (int startSquare = 0; startSquare < 64; startSquare++) {
-                int piece = squares[startSquare];
-                if (isType(piece, KING) && isColour(piece, friendlyColour)) {
-                    friendlyKingPosition = startSquare;
-                    break;
-                }
-                if (isType(piece, KING) && isColour(piece, opponentColour)) {
-                    opponentKingPosition = startSquare;
-                }
-            }
 
             for (int startSquare = 0; startSquare < 64; startSquare++) {
                 int piece = squares[startSquare];
@@ -101,6 +91,7 @@ public class MoveGenerator {
                 }
             }
             generateKingMoves(friendly);
+            generateCastleMoves(board.getWhiteCastlingRights(), board.getBlackCastlingRights());
         }
         checkKingLegality();
         return moves;
@@ -249,8 +240,8 @@ public class MoveGenerator {
         moves = new ArrayList<>();
         kingMoves = new ArrayList<>();
         checkingMoves = new ArrayList<>();
-        friendlyKingPosition = -1;
-        opponentKingPosition = -1;
+        friendlyKingPosition = board.getFriendlyKingPosition();
+        opponentKingPosition = board.getOpponentKingPosition();
         // Reset bitboards
         empty = 0;
         notWhite = 0;
@@ -469,6 +460,38 @@ public class MoveGenerator {
         }
     }
 
+    private void generateCastleMoves(boolean[] whiteCastlingRights, boolean[] blackCastlingRights) {
+        if (friendlyColour == WHITE) {
+            if (whiteCastlingRights[0] && squares[5] == 0 && squares[6] == 0) {
+                long involvedSquares = addBit(addBit(addBit(0, 6), 5), 4);
+                if ((involvedSquares & taboo) == 0) {
+                    addMove(friendlyKingPosition, 6);
+                }
+            }
+            if (whiteCastlingRights[1] && squares[3] == 0 && squares[2] == 0 && squares[1] == 0) {
+                long involvedSquares = addBit(addBit(addBit(0, 4), 3), 2);
+                if ((involvedSquares & taboo) == 0) {
+                    addMove(friendlyKingPosition, 2);
+                }
+            }
+            return;
+        }
+        if (friendlyColour == BLACK) {
+            if (blackCastlingRights[0] && squares[57] == 0 && squares[58] == 0 && squares[59] == 0) {
+                long involvedSquares = addBit(addBit(addBit(0, 58), 59), 60);
+                if ((involvedSquares & taboo) == 0) {
+                    addMove(friendlyKingPosition, 58);
+                }
+            }
+            if (blackCastlingRights[1] && squares[61] == 0 && squares[62] == 0) {
+                long involvedSquares = addBit(addBit(addBit(0, 60), 61), 62);
+                if ((involvedSquares & taboo) == 0) {
+                    addMove(friendlyKingPosition, 62);
+                }
+            }
+        }
+    }
+
     private void generateSlidingMoves(int startSquare, int piece, boolean friendly) {
         int startDirIndex = isType(piece, BISHOP) ? 4 : 0;
         int endDirIndex = isType(piece, ROOK) ? 4 : 8;
@@ -480,17 +503,17 @@ public class MoveGenerator {
                 int pieceOnTargetSquare = squares[targetSquare];
 
                 if (!friendly) {
+                    System.out.println(moveBlocked);
                     if (!moveBlocked) {
                         taboo = addBit(taboo, targetSquare);
                         if (targetSquare == friendlyKingPosition) {
-                            System.out.println(startSquare + ", " + targetSquare + ", " + friendlyKingPosition);
-
-                            System.out.println("Checking Move");
                             checkingMoves.add(new Move(startSquare, targetSquare));
                         }
                     }
-                    if (isColour(pieceOnTargetSquare, friendlyColour) && !isType(pieceOnTargetSquare, KING)) {
+                    if (isColour(pieceOnTargetSquare, opponentColour) && !isType(pieceOnTargetSquare, KING)) {
                         moveBlocked = true;
+                        System.out.println("Move blocked");
+                        System.out.println(startSquare);
                     }
                     tabooXRay = addBit(tabooXRay, targetSquare);
                     continue;
@@ -568,7 +591,6 @@ public class MoveGenerator {
     public long getTabooXRay() {
         return tabooXRay;
     }
-
 
     public static class Move {
         public final int startSquare;
