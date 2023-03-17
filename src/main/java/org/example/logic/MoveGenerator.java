@@ -21,9 +21,14 @@ public class MoveGenerator {
     private long taboo;
     private long tabooXRay;
     private List<Move> moves;
+    private List<Move> kingMoves;
+    private List<Move> checkingMoves;
     private int friendlyColour;
     private int opponentColour;
+    private int friendlyKingPosition;
+    private int opponentKingPosition;
     private int[] squares;
+    private boolean check = false;
 
     private static long northOne(long bit) {
         return bit << 8;
@@ -58,13 +63,23 @@ public class MoveGenerator {
     }
 
     public List<Move> generateMoves(Board board) {
-        resetVariables(board);
+        resetAttributes(board);
         generateBitboards();
 
-        int kingPosition = -1;
         boolean friendly;
         for (int i = 0; i < 2; i++) {
             friendly = i != 0;
+            for (int startSquare = 0; startSquare < 64; startSquare++) {
+                int piece = squares[startSquare];
+                if (isType(piece, KING) && isColour(piece, friendlyColour)) {
+                    friendlyKingPosition = startSquare;
+                    break;
+                }
+                if (isType(piece, KING) && isColour(piece, opponentColour)) {
+                    opponentKingPosition = startSquare;
+                }
+            }
+
             for (int startSquare = 0; startSquare < 64; startSquare++) {
                 int piece = squares[startSquare];
                 if ((friendly && isColour(piece, opponentColour)) | (!friendly && isColour(piece, friendlyColour))) {
@@ -87,10 +102,9 @@ public class MoveGenerator {
                     kingPosition = startSquare;
                 }
             }
-            generateKingMoves(kingPosition, friendly);
+            generateKingMoves(friendly);
         }
-        checkKingLegality(kingPosition);
-        generateLegalMoves(kingPosition);
+        checkKingLegality();
         return moves;
     }
 
@@ -105,23 +119,17 @@ public class MoveGenerator {
         moves.removeAll(movesToRemove);
     }
 
-    private void generateLegalMoves(int kingPosition) {
+    private void generatePinnedPieceMoves() {
         List<Integer> pinnedPiecePositions = getPositionsFromBitboard(pinnedPieces);
 
 
         for (int position : pinnedPiecePositions) {
             int pinnedPiece = squares[position];
 
+            int xDist = (position % 8) - (friendlyKingPosition % 8);
+            int yDist = (int) ((int) floor(position / 8f) - floor(friendlyKingPosition / 8f));
 
-            // If a knight is pinned it cannot move, so we move on to the next pinned piece if any
-            if (isType(pinnedPiece, KNIGHT)) {
-                continue;
-            }
-
-            int xDist = (position % 8) - (kingPosition % 8);
-            int yDist = (int) ((int) floor(position / 8f) - floor(kingPosition / 8f));
-
-            int directionToKing = getDirectionToKing(xDist, yDist);
+            int directionToKing = getDirectionToTarget(xDist, yDist);
             int directionToPinningPiece = getOppositeDirection(directionToKing);
 
             int distanceToKing = (int) sqrt(pow(xDist, 2) + pow(yDist, 2));
@@ -141,6 +149,10 @@ public class MoveGenerator {
 
             removeMoves(position);
 
+            // If a knight is pinned it cannot move, so we move on to the next pinned piece if any
+            if (isType(pinnedPiece, KNIGHT)) {
+                continue;
+            }
             // Rooks cannot move diagonally so if the direction index is greater than 3 (meaning a diagonal move) we move on to the next pinned piece if any
             if (isType(pinnedPiece, ROOK) && directionToKing > 3) {
                 continue;
@@ -178,7 +190,7 @@ public class MoveGenerator {
      * @return an index referring to the direction offsets as defined in PrecomputedMoveData.
      * @see org.example.util.PrecomputedMoveData
      */
-    private int getDirectionToKing(int xDist, int yDist) {
+    private int getDirectionToTarget(int xDist, int yDist) {
         if (xDist == 0 && yDist > 0) {
             return 0; // North
         }
@@ -233,11 +245,15 @@ public class MoveGenerator {
         }
     }
 
-    private void resetVariables(Board board) {
+    private void resetAttributes(Board board) {
         squares = board.getSquares();
         friendlyColour = board.getColourToMove();
         opponentColour = getOppositeColour(friendlyColour);
         moves = new ArrayList<>();
+        kingMoves = new ArrayList<>();
+        checkingMoves = new ArrayList<>();
+        friendlyKingPosition = -1;
+        opponentKingPosition = -1;
         // Reset bitboards
         empty = 0;
         notWhite = 0;
@@ -276,23 +292,59 @@ public class MoveGenerator {
         }
     }
 
-    private void checkKingLegality(int kingPosition) {
-        long kingPositionBitboard = addBit(0, kingPosition);
-        if (!checkForChecks(kingPositionBitboard)) {
-            checkForPinnedPieces(kingPosition, kingPositionBitboard);
-        }
-        printBin(pinnedPieces);
-    }
+    private void checkKingLegality() {
+        long kingPositionBitboard = addBit(0, friendlyKingPosition);
 
-    private boolean checkForChecks(long kingPositionBitboard) {
-        if ((kingPositionBitboard & taboo) >= 1) {
+        check = (kingPositionBitboard & taboo) >= 1;
+        if (check) {
+            moves = getRemainingLegalMoves();
+            for (Move move : moves) {
+                System.out.printf("%s, %s\n", move.startSquare, move.targetSquare);
+            }
+            if (moves.size() == 0) {
+                System.out.println("CHECKMATE");
+            }
             System.out.println("CHECK");
-            return true;
+            return;
         }
-        return false;
+        if (moves.size() == 0) {
+            System.out.println("STALEMATE");
+            return;
+        }
+        checkForPinnedPieces(kingPositionBitboard);
+        generatePinnedPieceMoves();
     }
 
-    private void checkForPinnedPieces(int kingPosition, long kingPositionBitboard) {
+    private List<Move> getRemainingLegalMoves() {
+        if (checkingMoves.size() > 1) {
+            return kingMoves;
+        }
+
+        // Checkmate is true unless a move can cover the check, or the checking piece can be taken
+        List<Move> remainingLegalMoves = new ArrayList<>();
+        Move checkingMove = checkingMoves.get(0);
+        int xDist = (checkingMove.startSquare % 8) - (friendlyKingPosition % 8);
+        int yDist = (int) (floor(checkingMove.startSquare) / 8f - floor(friendlyKingPosition / 8f));
+
+        int checkDirection = directionOffsets[getDirectionToTarget(xDist, yDist)];
+        int checkDistance = (int) sqrt(pow(xDist, 2) + pow(yDist, 2));
+
+        List<Integer> interceptingTargets = new ArrayList<>();
+
+        for (int i = 1; i < checkDistance; i++) {
+            interceptingTargets.add(checkingMove.startSquare + (checkDirection * i));
+        }
+
+        for (Move friendlyMove : moves) {
+            if (friendlyMove.targetSquare == checkingMove.startSquare || interceptingTargets.contains(friendlyMove.targetSquare)) {
+                remainingLegalMoves.add(friendlyMove);
+            }
+        }
+        remainingLegalMoves.addAll(kingMoves);
+        return remainingLegalMoves;
+    }
+
+    private void checkForPinnedPieces(long kingPositionBitboard) {
         if ((kingPositionBitboard & tabooXRay) == 0) {
             return;
         }
@@ -301,8 +353,8 @@ public class MoveGenerator {
         for (int directionIndex = 0; directionIndex < 8; directionIndex++) {
             List<Integer> potentialPinnedPiecePositions = new ArrayList<>();
             // For each square stemming from the king position in certain direction
-            for (int n = 0; n < numSquaresToEdge[kingPosition][directionIndex]; n++) {
-                int targetSquare = kingPosition + directionOffsets[directionIndex] * (n + 1);
+            for (int n = 0; n < numSquaresToEdge[friendlyKingPosition][directionIndex]; n++) {
+                int targetSquare = friendlyKingPosition + directionOffsets[directionIndex] * (n + 1);
                 int pieceOnTargetSquare = squares[targetSquare];
 
                 if (pieceOnTargetSquare == 0) {
@@ -337,6 +389,11 @@ public class MoveGenerator {
         if (!friendly) {
             long attacks = opponentColour == WHITE ? (northEastOne(binStartSquare) | northWestOne(binStartSquare)) : (southEastOne(binStartSquare) | southWestOne(binStartSquare));
             taboo |= attacks;
+            for (int attack : getPositionsFromBitboard(attacks)) {
+                if (attack == friendlyKingPosition) {
+                    checkingMoves.add(new Move(startSquare, attack));
+                }
+            }
             return;
         }
 
@@ -375,17 +432,22 @@ public class MoveGenerator {
         possiblePosition[7] = ((binStartSquare >> 17) & notHFile);
 
         for (long position : possiblePosition) {
+            int targetSquare = getPositionFromBitboard(position & notFriendlyPieces);
+
             if (!friendly) {
                 taboo |= position;
+                if (targetSquare == friendlyKingPosition) {
+                    checkingMoves.add(new Move(startSquare, targetSquare));
+                }
                 continue;
             }
-            long targetSquare = getPositionFromBitboard(position & notFriendlyPieces);
-            addMove(startSquare, (int) targetSquare);
+            addMove(startSquare, targetSquare);
         }
     }
 
-    private void generateKingMoves(int startSquare, boolean friendly) {
-        long binStartSquare = (long) pow(2, startSquare);
+    private void generateKingMoves(boolean friendly) {
+
+        long binStartSquare = addBit(0, friendly ? friendlyKingPosition : opponentKingPosition);
         long[] kingTargets = new long[8];
 
         kingTargets[0] = northWestOne(binStartSquare);
@@ -402,10 +464,11 @@ public class MoveGenerator {
                 taboo |= targetSquareBitboard;
                 continue;
             }
-
             targetSquareBitboard &= ~taboo & notFriendlyPieces;
+
             int targetSquare = getPositionFromBitboard(targetSquareBitboard);
-            addMove(startSquare, targetSquare);
+            addMove(friendlyKingPosition, targetSquare);
+            addKingMove(friendlyKingPosition, targetSquare);
         }
     }
 
@@ -422,6 +485,12 @@ public class MoveGenerator {
                 if (!friendly) {
                     if (!moveBlocked) {
                         taboo = addBit(taboo, targetSquare);
+                        if (targetSquare == friendlyKingPosition) {
+                            System.out.println(startSquare + ", " + targetSquare + ", " + friendlyKingPosition);
+
+                            System.out.println("Checking Move");
+                            checkingMoves.add(new Move(startSquare, targetSquare));
+                        }
                     }
                     if (isColour(pieceOnTargetSquare, friendlyColour) && !isType(pieceOnTargetSquare, KING)) {
                         moveBlocked = true;
@@ -478,7 +547,17 @@ public class MoveGenerator {
     }
 
     private void addMove(int start, int target) {
+        if (target < 0 || target > 63) {
+            return;
+        }
         moves.add(new Move(start, target));
+    }
+
+    private void addKingMove(int start, int target) {
+        if (target < 0 || target > 63) {
+            return;
+        }
+        kingMoves.add(new Move(start, target));
     }
 
     public long getPinned() {
