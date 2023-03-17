@@ -16,6 +16,8 @@ public class BoardServiceImpl implements BoardService {
 
 
     public BoardServiceImpl(Board board) {
+        //or pass encoded board (String) and transform
+        // this.board = getFromEnconded(encondedString)
         this.board = board;
         this.moveGenerator = new MoveGenerator();
     }
