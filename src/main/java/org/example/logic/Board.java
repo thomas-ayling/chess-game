@@ -3,6 +3,8 @@ package org.example.logic;
 import org.example.util.LoadUtil;
 import org.example.logic.pieces.Piece;
 import org.example.logic.MoveGenerator.Move;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,6 +16,8 @@ public class Board {
     private int colourToMove = Piece.BLACK;
     private List<Move> moves;
     private final MoveGenerator moveGenerator = new MoveGenerator();
+    private final Logger logger = LoggerFactory.getLogger(Board.class);
+
 
     public Board() {
         try {
@@ -21,9 +25,9 @@ public class Board {
             Scanner scanner = new Scanner(fenFile);
             String fenString = scanner.next();
             squares = LoadUtil.LoadBoardFromFen(fenString);
-            System.out.println(fenString);
+            logger.debug(fenString);
         } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
+            logger.error("An error occurred.");
             e.printStackTrace();
         }
         moves = moveGenerator.generateMoves(this);
@@ -36,10 +40,11 @@ public class Board {
         squares[targetPos] = pieceToMove;
         if (takenPiece > 0) {
             //todo: remove piece on check
-            System.out.println(Piece.getType(takenPiece));
+            logger.debug(Piece.getType(takenPiece));
         }
         colourToMove = Piece.getOppositeColour(colourToMove);
         moves = moveGenerator.generateMoves(this);
+        logger.debug("------------- NEXT MOVE ---------------");
     }
 
     public int[] getSquares() {
