@@ -8,6 +8,7 @@ import java.util.List;
 
 import static java.lang.Math.*;
 import static org.example.logic.pieces.Piece.*;
+import static org.example.util.ByteUtil.printBin;
 import static org.example.util.PrecomputedMoveData.directionOffsets;
 import static org.example.util.PrecomputedMoveData.numSquaresToEdge;
 
@@ -91,10 +92,26 @@ public class MoveGenerator {
                 }
             }
             generateKingMoves(friendly);
-            generateCastleMoves(board.getWhiteCastlingRights(), board.getBlackCastlingRights());
+            if (friendly) {
+                generateCastleMoves(board.getWhiteCastlingRights(), board.getBlackCastlingRights());
+            }
         }
         checkKingLegality();
+        generateEnPassantMoves(board.getEnPassantMoves());
+
         return moves;
+    }
+
+    private void generateEnPassantMoves(List<Board.EnPassantMove> possibleEnPassantMoves) {
+        if (possibleEnPassantMoves.size() == 0) {
+            return;
+        }
+        for (Board.EnPassantMove move : possibleEnPassantMoves) {
+            long startPosBitboard = addBit(0, move.getAttackingPawnPos());
+            if ((startPosBitboard & pinnedPieces) == 0) {
+                addMove(move.getAttackingPawnPos(), move.getTargetPawnPos());
+            }
+        }
     }
 
     private void removeMoves(int position) {
@@ -124,13 +141,16 @@ public class MoveGenerator {
 
             if (isType(pinnedPiece, PAWN)) {
                 List<Move> movesToRemove = new ArrayList<>();
+                System.out.println("Dir");
+                System.out.println(directionToKing);
                 for (Move move : moves) {
                     // if (positions is not start of a possible move) or (move attacks the pinning piece) then check next move, otherwise remove the move
-                    if (move.startSquare != position || directionOffsets[directionToPinningPiece] == move.targetSquare - move.startSquare) {
+                    if (move.startSquare != position || directionToPinningPiece == 0 || directionToPinningPiece == 1) {
                         continue;
                     }
                     movesToRemove.add(move);
                 }
+                System.out.println(movesToRemove);
                 moves.removeAll(movesToRemove);
                 continue;
             }
@@ -334,7 +354,7 @@ public class MoveGenerator {
             return;
         }
 
-        // Sliding logic stemming from king
+        // Sliding logic sends rays out from the king
         for (int directionIndex = 0; directionIndex < 8; directionIndex++) {
             List<Integer> potentialPinnedPiecePositions = new ArrayList<>();
             // For each square stemming from the king position in certain direction
@@ -350,6 +370,12 @@ public class MoveGenerator {
                 }
                 if (isSlidingPiece(pieceOnTargetSquare) && isColour(pieceOnTargetSquare, opponentColour)) {
                     if (potentialPinnedPiecePositions.size() > 0) {
+                        if (isType(pieceOnTargetSquare, ROOK) && directionIndex > 3) {
+                            break;
+                        }
+                        if (isType(pieceOnTargetSquare, BISHOP) && directionIndex < 4) {
+                            break;
+                        }
                         pinnedPieces = addBit(pinnedPieces, potentialPinnedPiecePositions.get(0));
                         break;
                     }
@@ -500,17 +526,14 @@ public class MoveGenerator {
                 int pieceOnTargetSquare = squares[targetSquare];
 
                 if (!friendly) {
-                    System.out.println(moveBlocked);
                     if (!moveBlocked) {
                         taboo = addBit(taboo, targetSquare);
                         if (targetSquare == friendlyKingPosition) {
                             checkingMoves.add(new Move(startSquare, targetSquare));
                         }
                     }
-                    if (isColour(pieceOnTargetSquare, opponentColour) && !isType(pieceOnTargetSquare, KING)) {
+                    if (pieceOnTargetSquare > 0 && !isType(pieceOnTargetSquare, KING)) {
                         moveBlocked = true;
-                        System.out.println("Move blocked");
-                        System.out.println(startSquare);
                     }
                     tabooXRay = addBit(tabooXRay, targetSquare);
                     continue;
@@ -596,6 +619,14 @@ public class MoveGenerator {
         public Move(int startSquare, int targetSquare) {
             this.startSquare = startSquare;
             this.targetSquare = targetSquare;
+        }
+
+        @Override
+        public String toString() {
+            return "Move{" +
+                    "startSquare=" + startSquare +
+                    ", targetSquare=" + targetSquare +
+                    '}';
         }
     }
 }

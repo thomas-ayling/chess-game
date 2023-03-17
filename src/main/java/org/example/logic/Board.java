@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.Math.floor;
 import static org.example.logic.pieces.Piece.*;
 
 public class Board {
@@ -23,6 +25,7 @@ public class Board {
     private boolean[] blackCastlingRights = {true, true};
     private int friendlyKingPosition;
     private int opponentKingPosition;
+    private List<EnPassantMove> enPassantMoves = new ArrayList<>();
 
 
     public Board() {
@@ -59,6 +62,8 @@ public class Board {
                 }
             }
         }
+
+
         if (!castled) {
             int pieceToMove = squares[startPos];
             int takenPiece = squares[targetPos];
@@ -67,6 +72,22 @@ public class Board {
             // Check castling rights
             if (isType(pieceToMove, ROOK)) {
                 updateCastlingRights(startPos);
+            }
+
+            if (isType(pieceToMove, PAWN)) {
+                // Check en passant moves from previous move
+                for (EnPassantMove move : enPassantMoves) {
+                    if (startPos == move.attackingPawnPos && targetPos == move.targetPawnPos) {
+                        squares[move.attackingPawnPos] = 0;
+                        squares[move.targetPawnPos] = pieceToMove;
+                        squares[move.attackedPawnPos] = 0;
+                        System.out.println("En Passant take");
+                        //Todo: add taken piece to list
+                        break;
+                    }
+                }
+                // Then update from this move
+                checkForEnPassantMoves(startPos, targetPos);
             }
 
             if (takenPiece > 0) {
@@ -85,13 +106,51 @@ public class Board {
         System.out.printf("------------- %s'S MOVE ---------------\n", getColour(colourToMove));
     }
 
-    private boolean castle(int targetPos) {
+    private void checkForEnPassantMoves(int startPos, int targetPos) {
+        enPassantMoves = new ArrayList<>();
+        int startRank = (int) (floor(startPos / 8f) + 1);
+        if (isColour(colourToMove, WHITE) && startRank != 2) {
+            return;
+        }
+        if (isColour(colourToMove, BLACK) && startRank != 7) {
+            return;
+        }
+        int targetRank = (int) (floor(targetPos / 8f) + 1);
+        int targetFile = targetPos % 8 + 1;
+
+        if (colourToMove == WHITE && targetRank == 4) {
+            generateEnPassantMoves( targetPos, targetFile, BLACK);
+            return;
+        }
+        if (colourToMove == BLACK && targetRank == 5) {
+            generateEnPassantMoves( targetPos, targetFile, WHITE);
+        }
+    }
+
+    private void generateEnPassantMoves(int targetPos, int targetFile, int opponentColour) {
+        int targetPawnPos = opponentColour == BLACK ? targetPos - 8 : targetPos + 8;
+        if (targetFile - 1 >= 1) {
+            int leftPiece = squares[targetPos - 1];
+            if (isColour(leftPiece, opponentColour) && isType(leftPiece, PAWN)) {
+                enPassantMoves.add(new EnPassantMove(targetPos - 1, targetPos, targetPawnPos));
+            }
+        }
+        if (targetFile + 1 <= 8) {
+            int rightPiece = squares[targetPos + 1];
+            if (isColour(rightPiece, opponentColour) && isType(rightPiece, PAWN)) {
+                enPassantMoves.add(new EnPassantMove(targetPos + 1, targetPos, targetPawnPos));
+            }
+        }
+        System.out.println(enPassantMoves.toString());
+    }
+
+    private boolean castle(int pos) {
         if ((friendlyKingPosition == 4 || friendlyKingPosition == 60)
-                && (targetPos == 2 || targetPos == 6 || targetPos == 58 || targetPos == 62)) {
+                && (pos == 2 || pos == 6 || pos == 58 || pos == 62)) {
             switch (friendlyKingPosition) {
                 // If white king start position
                 case 4:
-                    switch (targetPos) {
+                    switch (pos) {
                         case 2:
                             squares[0] = 0;
                             squares[4] = 0;
@@ -108,7 +167,7 @@ public class Board {
                     break;
                 // If black king start position
                 case 60:
-                    switch (targetPos) {
+                    switch (pos) {
                         case 58:
                             squares[56] = 0;
                             squares[60] = 0;
@@ -198,5 +257,47 @@ public class Board {
 
     public int getOpponentKingPosition() {
         return opponentKingPosition;
+    }
+
+    public List<EnPassantMove> getEnPassantMoves() {
+        return enPassantMoves;
+    }
+
+    public class EnPassantMove {
+        private int attackingPawnPos;
+        private int attackedPawnPos;
+        private int targetPawnPos;
+
+        /**
+         * @param attackingPawnPos the position of the pawn that could attack
+         * @param attackedPawnPos  the position fo the pawn that is being attacked
+         * @param targetPawnPos    where the attacking pawn will end up
+         */
+        public EnPassantMove(int attackingPawnPos, int attackedPawnPos, int targetPawnPos) {
+            this.attackingPawnPos = attackingPawnPos;
+            this.attackedPawnPos = attackedPawnPos;
+            this.targetPawnPos = targetPawnPos;
+        }
+
+        public int getAttackingPawnPos() {
+            return attackingPawnPos;
+        }
+
+        public int getTargetPawnPos() {
+            return targetPawnPos;
+        }
+
+        public int getAttackedPawnPos() {
+            return attackedPawnPos;
+        }
+
+        @Override
+        public String toString() {
+            return "EnPassantMove{" +
+                    "attackingPawnPos=" + attackingPawnPos +
+                    ", attackedPawnPos=" + attackedPawnPos +
+                    ", targetPawnPos=" + targetPawnPos +
+                    '}';
+        }
     }
 }

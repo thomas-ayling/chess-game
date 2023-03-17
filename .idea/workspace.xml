@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Automated changes">
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Removed debugging sout">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/en-passant-board.fen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/initial-board.fen" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/initial-board.fen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +102,7 @@
       <workItem from="1678203426578" duration="46030000" />
       <workItem from="1678365873002" duration="41141000" />
       <workItem from="1678716328440" duration="66169000" />
-      <workItem from="1678985389059" duration="17453000" />
+      <workItem from="1678985389059" duration="27894000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -332,7 +335,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679056013900</updated>
     </task>
-    <option name="localTasksCounter" value="34" />
+    <task id="LOCAL-00034" summary="Added castling">
+      <created>1679065527937</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1679065527937</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Removed debugging sout">
+      <created>1679065568275</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1679065568275</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -350,8 +367,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixes to match move gen" />
-    <MESSAGE value="Automatic change" />
     <MESSAGE value="todo completed" />
     <MESSAGE value="Won't compie - array out of bounds error on ln 140 Move Generator" />
     <MESSAGE value="Won't compile - array out of bounds error on ln 140 Move Generator" />
@@ -375,6 +390,8 @@
     <MESSAGE value="Added get colour method" />
     <MESSAGE value="Added sls4j dependency" />
     <MESSAGE value="Automated changes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Automated changes" />
+    <MESSAGE value="Added castling" />
+    <MESSAGE value="Removed debugging sout" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removed debugging sout" />
   </component>
 </project>
