@@ -1,11 +1,13 @@
 package org.example.logic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Math.*;
 import static org.example.logic.pieces.Piece.*;
-import static org.example.util.ByteUtil.printBin;
 import static org.example.util.PrecomputedMoveData.directionOffsets;
 import static org.example.util.PrecomputedMoveData.numSquaresToEdge;
 
@@ -13,6 +15,7 @@ import static org.example.util.PrecomputedMoveData.numSquaresToEdge;
 public class MoveGenerator {
     private final long notAFile = 0xFEFEFEFEFEFEFEFEL;
     private final long notHFile = 0x7F7F7F7F7F7F7F7FL;
+    private final Logger logger = LoggerFactory.getLogger(MoveGenerator.class);
     private long pinnedPieces = 0;
     private long empty;
     private long notWhite;
@@ -85,7 +88,6 @@ public class MoveGenerator {
                 if ((friendly && isColour(piece, opponentColour)) | (!friendly && isColour(piece, friendlyColour))) {
                     continue;
                 }
-
                 if (isType(piece, BISHOP) || isType(piece, ROOK) || isType(piece, QUEEN)) {
                     generateSlidingMoves(startSquare, piece, friendly);
                     continue;
@@ -96,10 +98,6 @@ public class MoveGenerator {
                 }
                 if (isType(piece, KNIGHT)) {
                     generateKnightMoves(startSquare, friendly);
-                    continue;
-                }
-                if (isType(piece, KING)) {
-                    kingPosition = startSquare;
                 }
             }
             generateKingMoves(friendly);
@@ -121,7 +119,6 @@ public class MoveGenerator {
 
     private void generatePinnedPieceMoves() {
         List<Integer> pinnedPiecePositions = getPositionsFromBitboard(pinnedPieces);
-
 
         for (int position : pinnedPiecePositions) {
             int pinnedPiece = squares[position];
