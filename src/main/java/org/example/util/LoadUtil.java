@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LoadUtil {
-    public static int[] LoadBoardFromFen(String fen) {
+    public static int[] loadBoardFromFen(String fen) {
         Map<Character, Integer> pieceTypeFromSymbol = new HashMap<>() {{
             put('k', Piece.KING);
             put('p', Piece.PAWN);
