@@ -69,7 +69,7 @@ public class ChessBoard extends JPanel implements ActionListener {
         g2.setColor(Color.black);
         for (int file = 0; file < CELLS; file++) {
             for (int rank = 0; rank < CELLS; rank++) {
-                if ((file + rank) % 2 == 1) {
+                if ((file + rank) % 2 == 0) {
                     g2.setColor(Color.black);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }

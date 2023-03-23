@@ -9,7 +9,7 @@ import lombok.*;
 @ToString
 @EqualsAndHashCode
 @Builder
-public class Board {
+public class   Board {
     String player1;
     String player2;
     String squares;

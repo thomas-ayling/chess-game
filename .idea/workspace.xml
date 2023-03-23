@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Removed debugging sout">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/en-passant-board.fen" afterDir="false" />
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Game logic is 99.9% done. Just need to tackle pawn promotion">
+      <change afterPath="$PROJECT_DIR$/src/main/java/backend/model/MoveRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/backend/model/MoveResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/backend/service/MoveService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/backend/service/impl/MoveServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/castle-board.fen" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/backend/exception/TurnException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/exception/TurnException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/backend/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/model/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/backend/service/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/service/BoardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/backend/service/impl/BoardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/service/impl/BoardServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
@@ -21,6 +29,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -36,10 +45,10 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="MavenImportPreferences">
-    <option name="importingSettings">
-      <MavenImportingSettings>
-        <option name="workspaceImportEnabled" value="true" />
-      </MavenImportingSettings>
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
     </option>
   </component>
   <component name="ProjectId" id="2MgyGLY7pdCBUmv2f6bbssJbZsi" />
@@ -61,7 +70,8 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
@@ -102,7 +112,9 @@
       <workItem from="1678203426578" duration="46030000" />
       <workItem from="1678365873002" duration="41141000" />
       <workItem from="1678716328440" duration="66169000" />
-      <workItem from="1678985389059" duration="27894000" />
+      <workItem from="1678985389059" duration="28266000" />
+      <workItem from="1679075801760" duration="9673000" />
+      <workItem from="1679259947098" duration="6441000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -349,7 +361,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679065568275</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Game logic is 99.9% done. Just need to tackle pawn promotion">
+      <created>1679075648776</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1679075648776</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -367,7 +386,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="todo completed" />
     <MESSAGE value="Won't compie - array out of bounds error on ln 140 Move Generator" />
     <MESSAGE value="Won't compile - array out of bounds error on ln 140 Move Generator" />
     <MESSAGE value="Will compile - fixed direction logic" />
@@ -392,6 +410,7 @@
     <MESSAGE value="Automated changes" />
     <MESSAGE value="Added castling" />
     <MESSAGE value="Removed debugging sout" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed debugging sout" />
+    <MESSAGE value="Game logic is 99.9% done. Just need to tackle pawn promotion" />
+    <option name="LAST_COMMIT_MESSAGE" value="Game logic is 99.9% done. Just need to tackle pawn promotion" />
   </component>
 </project>

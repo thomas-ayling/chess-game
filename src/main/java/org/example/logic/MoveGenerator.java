@@ -96,6 +96,7 @@ public class MoveGenerator {
                 generateCastleMoves(board.getWhiteCastlingRights(), board.getBlackCastlingRights());
             }
         }
+
         checkKingLegality();
         generateEnPassantMoves(board.getEnPassantMoves());
 
@@ -141,8 +142,6 @@ public class MoveGenerator {
 
             if (isType(pinnedPiece, PAWN)) {
                 List<Move> movesToRemove = new ArrayList<>();
-                System.out.println("Dir");
-                System.out.println(directionToKing);
                 for (Move move : moves) {
                     // if (positions is not start of a possible move) or (move attacks the pinning piece) then check next move, otherwise remove the move
                     if (move.startSquare != position || directionToPinningPiece == 0 || directionToPinningPiece == 1) {
@@ -150,7 +149,6 @@ public class MoveGenerator {
                     }
                     movesToRemove.add(move);
                 }
-                System.out.println(movesToRemove);
                 moves.removeAll(movesToRemove);
                 continue;
             }
@@ -329,14 +327,15 @@ public class MoveGenerator {
         List<Move> remainingLegalMoves = new ArrayList<>();
         Move checkingMove = checkingMoves.get(0);
         int xDist = (checkingMove.startSquare % 8) - (friendlyKingPosition % 8);
-        int yDist = (int) (floor(checkingMove.startSquare) / 8f - floor(friendlyKingPosition / 8f));
+        int yDist = (int) floor(friendlyKingPosition / 8f - floor(checkingMove.startSquare) / 8f);
+
 
         int checkDirection = directionOffsets[getDirectionToTarget(xDist, yDist)];
         int checkDistance = (int) sqrt(pow(xDist, 2) + pow(yDist, 2));
 
         List<Integer> interceptingTargets = new ArrayList<>();
 
-        for (int i = 1; i < checkDistance; i++) {
+        for (int i = 1; i <= checkDistance; i++) {
             interceptingTargets.add(checkingMove.startSquare + (checkDirection * i));
         }
 
