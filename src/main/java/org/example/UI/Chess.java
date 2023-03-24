@@ -1,6 +1,6 @@
 package org.example.UI;
 
-import org.example.util.ByteUtil;
+import org.example.logic.board.Board;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +18,7 @@ public class Chess extends JFrame {
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
+            new Board();
             JFrame frame = new Chess();
             frame.setVisible(true);
         });

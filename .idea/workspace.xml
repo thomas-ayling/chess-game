@@ -4,21 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Game logic is 99.9% done. Just need to tackle pawn promotion">
-      <change afterPath="$PROJECT_DIR$/src/main/java/backend/model/MoveRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/backend/model/MoveResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/backend/service/MoveService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/backend/service/impl/MoveServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/castle-board.fen" afterDir="false" />
+    <list default="true" id="5f2d31bb-6274-4111-bb6c-4449b12d3628" name="Changes" comment="Tests working for depths of 1, 2, and 3">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Engine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/exception/TurnException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/exception/TurnException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/model/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/model/Board.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/service/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/service/BoardService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/backend/service/impl/BoardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/service/impl/BoardServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/backend/service/impl/MoveServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/backend/service/impl/MoveServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/Chess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/Chess.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/UI/ChessBoard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/board/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/logic/MoveGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/initial-board.fen" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/initial-board.fen" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,6 +28,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RESET_MODE" value="HARD" />
   </component>
@@ -114,7 +112,7 @@
       <workItem from="1678716328440" duration="66169000" />
       <workItem from="1678985389059" duration="28266000" />
       <workItem from="1679075801760" duration="9673000" />
-      <workItem from="1679259947098" duration="6441000" />
+      <workItem from="1679259947098" duration="32899000" />
     </task>
     <task id="LOCAL-00001" summary="Initial Commit">
       <created>1678362598430</created>
@@ -368,7 +366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679075648776</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Logic complete">
+      <created>1679566665221</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1679566665222</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -386,8 +391,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Won't compie - array out of bounds error on ln 140 Move Generator" />
-    <MESSAGE value="Won't compile - array out of bounds error on ln 140 Move Generator" />
     <MESSAGE value="Will compile - fixed direction logic" />
     <MESSAGE value="Added comment for clarity" />
     <MESSAGE value="Fixed pinned move gen logic" />
@@ -411,6 +414,8 @@
     <MESSAGE value="Added castling" />
     <MESSAGE value="Removed debugging sout" />
     <MESSAGE value="Game logic is 99.9% done. Just need to tackle pawn promotion" />
-    <option name="LAST_COMMIT_MESSAGE" value="Game logic is 99.9% done. Just need to tackle pawn promotion" />
+    <MESSAGE value="Logic complete" />
+    <MESSAGE value="Tests working for depths of 1, 2, and 3" />
+    <option name="LAST_COMMIT_MESSAGE" value="Tests working for depths of 1, 2, and 3" />
   </component>
 </project>

@@ -1,5 +1,6 @@
 package org.example.logic;
 
+import org.example.logic.board.Board;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,66 +9,65 @@ import java.util.List;
 
 import static java.lang.Math.*;
 import static org.example.logic.pieces.Piece.*;
-import static org.example.util.ByteUtil.printBin;
 import static org.example.util.PrecomputedMoveData.directionOffsets;
 import static org.example.util.PrecomputedMoveData.numSquaresToEdge;
 
 
 public class MoveGenerator {
-    private final long notAFile = 0xFEFEFEFEFEFEFEFEL;
-    private final long notHFile = 0x7F7F7F7F7F7F7F7FL;
+    private static final long notAFile = 0xFEFEFEFEFEFEFEFEL;
+    private static final long notHFile = 0x7F7F7F7F7F7F7F7FL;
     private final Logger logger = LoggerFactory.getLogger(MoveGenerator.class);
-    private long pinnedPieces = 0;
-    private long empty;
-    private long notWhite;
-    private long notBlack;
-    private long notFriendlyPieces;
-    private long taboo;
-    private long tabooXRay;
-    private List<Move> moves;
-    private List<Move> kingMoves;
-    private List<Move> checkingMoves;
-    private int friendlyColour;
-    private int opponentColour;
-    private int friendlyKingPosition;
-    private int opponentKingPosition;
-    private int[] squares;
-    private boolean check = false;
+    private static long pinnedPieces = 0;
+    private static long empty;
+    private static long notWhite;
+    private static long notBlack;
+    private static long notFriendlyPieces;
+    private static long taboo;
+    private static long tabooXRay;
+    private static List<Move> moves;
+    private static List<Move> kingMoves;
+    private static List<Move> checkingMoves;
+    private static int friendlyColour;
+    private static int opponentColour;
+    private static int friendlyKingPosition;
+    private static int opponentKingPosition;
+    private static int[] squares;
+    private static boolean check = false;
 
     private static long northOne(long bit) {
         return bit << 8;
     }
 
-    private long northEastOne(long bit) {
+    private static long northEastOne(long bit) {
         return (bit << 9) & notAFile;
     }
 
-    private long eastOne(long bit) {
+    private static long eastOne(long bit) {
         return (bit << 1) & notAFile;
     }
 
-    private long southEastOne(long bit) {
+    private static long southEastOne(long bit) {
         return (bit >> 7) & notAFile;
     }
 
-    private long southOne(long bit) {
+    private static long southOne(long bit) {
         return bit >> 8;
     }
 
-    private long southWestOne(long bit) {
+    private static long southWestOne(long bit) {
         return (bit >> 9) & notHFile;
     }
 
-    private long westOne(long bit) {
+    private static long westOne(long bit) {
         return (bit >> 1) & notHFile;
     }
 
-    private long northWestOne(long bit) {
+    private static long northWestOne(long bit) {
         return (bit << 7) & notHFile;
     }
 
-    public List<Move> generateMoves(Board board) {
-        resetAttributes(board);
+    public static List<Move> generateMoves() {
+        resetAttributes();
         generateBitboards();
 
         boolean friendly;
@@ -93,17 +93,18 @@ public class MoveGenerator {
             }
             generateKingMoves(friendly);
             if (friendly) {
-                generateCastleMoves(board.getWhiteCastlingRights(), board.getBlackCastlingRights());
+                generateCastleMoves();
             }
         }
 
         checkKingLegality();
-        generateEnPassantMoves(board.getEnPassantMoves());
+        generateEnPassantMoves();
 
         return moves;
     }
 
-    private void generateEnPassantMoves(List<Board.EnPassantMove> possibleEnPassantMoves) {
+    private static void generateEnPassantMoves() {
+        List<Board.EnPassantMove> possibleEnPassantMoves = Board.getEnPassantMoves();
         if (possibleEnPassantMoves.size() == 0) {
             return;
         }
@@ -115,7 +116,7 @@ public class MoveGenerator {
         }
     }
 
-    private void removeMoves(int position) {
+    private static void removeMoves(int position) {
         List<Move> movesToRemove = new ArrayList<>();
 
         for (Move move : moves) {
@@ -126,7 +127,7 @@ public class MoveGenerator {
         moves.removeAll(movesToRemove);
     }
 
-    private void generatePinnedPieceMoves() {
+    private static void generatePinnedPieceMoves() {
         List<Integer> pinnedPiecePositions = getPositionsFromBitboard(pinnedPieces);
 
         for (int position : pinnedPiecePositions) {
@@ -196,7 +197,7 @@ public class MoveGenerator {
      * @return an index referring to the direction offsets as defined in PrecomputedMoveData.
      * @see org.example.util.PrecomputedMoveData
      */
-    private int getDirectionToTarget(int xDist, int yDist) {
+    private static int getDirectionToTarget(int xDist, int yDist) {
         if (xDist == 0 && yDist > 0) {
             return 0; // North
         }
@@ -226,7 +227,7 @@ public class MoveGenerator {
         return -1;
     }
 
-    private int getOppositeDirection(int direction) {
+    private static int getOppositeDirection(int direction) {
         switch (direction) {
             case 0:
                 return 1;
@@ -251,15 +252,15 @@ public class MoveGenerator {
         }
     }
 
-    private void resetAttributes(Board board) {
-        squares = board.getSquares();
-        friendlyColour = board.getColourToMove();
+    private static void resetAttributes() {
+        squares = Board.getSquares();
+        friendlyColour = Board.getColourToMove();
         opponentColour = getOppositeColour(friendlyColour);
         moves = new ArrayList<>();
         kingMoves = new ArrayList<>();
         checkingMoves = new ArrayList<>();
-        friendlyKingPosition = board.getFriendlyKingPosition();
-        opponentKingPosition = board.getOpponentKingPosition();
+        friendlyKingPosition = Board.getFriendlyKingPosition();
+        opponentKingPosition = Board.getOpponentKingPosition();
         // Reset bitboards
         empty = 0;
         notWhite = 0;
@@ -269,14 +270,14 @@ public class MoveGenerator {
         pinnedPieces = 0;
     }
 
-    private void generateBitboards() {
+    private static void generateBitboards() {
         generateBitboard(WHITE);
         generateBitboard(BLACK);
         notFriendlyPieces = friendlyColour == WHITE ? notWhite : notBlack;
         empty = notWhite & notBlack;
     }
 
-    private void generateBitboard(int colour) {
+    private static void generateBitboard(int colour) {
         long notBitboard = 0;
 
         for (int i = 0; i < 64; i++) {
@@ -298,27 +299,29 @@ public class MoveGenerator {
         }
     }
 
-    private void checkKingLegality() {
+    private static void checkKingLegality() {
         long kingPositionBitboard = addBit(0, friendlyKingPosition);
 
         check = (kingPositionBitboard & taboo) >= 1;
         if (check) {
             moves = getRemainingLegalMoves();
             if (moves.size() == 0) {
-                System.out.println("CHECKMATE");
+                Board.alertCheckmate();
+//                System.out.println("MATE");
+                return;
             }
-            System.out.println("CHECK");
+//            System.out.println("CHECK");
             return;
         }
         if (moves.size() == 0) {
-            System.out.println("STALEMATE");
+//            System.out.println("STALEMATE");
             return;
         }
         checkForPinnedPieces(kingPositionBitboard);
         generatePinnedPieceMoves();
     }
 
-    private List<Move> getRemainingLegalMoves() {
+    private static List<Move> getRemainingLegalMoves() {
         if (checkingMoves.size() > 1) {
             return kingMoves;
         }
@@ -348,7 +351,7 @@ public class MoveGenerator {
         return remainingLegalMoves;
     }
 
-    private void checkForPinnedPieces(long kingPositionBitboard) {
+    private static void checkForPinnedPieces(long kingPositionBitboard) {
         if ((kingPositionBitboard & tabooXRay) == 0) {
             return;
         }
@@ -385,11 +388,11 @@ public class MoveGenerator {
         }
     }
 
-    private long generatePawnAttacks(long binStartSquare) {
+    private static long generatePawnAttacks(long binStartSquare) {
         return friendlyColour == WHITE ? (northEastOne(binStartSquare) | northWestOne(binStartSquare)) & ~notBlack : (southEastOne(binStartSquare) | southWestOne(binStartSquare)) & ~notWhite;
     }
 
-    private void generatePawnMoves(int startSquare, boolean friendly) {
+    private static void generatePawnMoves(int startSquare, boolean friendly) {
         long rank4 = 0x00000000FF000000L;
         long rank5 = 0x000000FF00000000L;
 
@@ -415,7 +418,7 @@ public class MoveGenerator {
         addPawnMoves(startSquare, pawnTargets);
     }
 
-    private void addPawnMoves(int startSquare, long pawnTargets) {
+    private static void addPawnMoves(int startSquare, long pawnTargets) {
         for (int target = 0; target < 64; target++) {
             // If there is a bit switched on
             if (pawnTargets << ~target < 0) {
@@ -424,7 +427,7 @@ public class MoveGenerator {
         }
     }
 
-    private void generateKnightMoves(int startSquare, boolean friendly) {
+    private static void generateKnightMoves(int startSquare, boolean friendly) {
         long notABFile = 0xFCFCFCFCFCFCFCFCL;
         long notGHFile = 0x3F3F3F3F3F3F3F3FL;
 
@@ -442,7 +445,8 @@ public class MoveGenerator {
         possiblePosition[7] = ((binStartSquare >> 17) & notHFile);
 
         for (long position : possiblePosition) {
-            int targetSquare = getPositionFromBitboard(position & notFriendlyPieces);
+            position &= notFriendlyPieces;
+            int targetSquare = getPositionFromBitboard(position);
 
             if (!friendly) {
                 taboo |= position;
@@ -455,7 +459,7 @@ public class MoveGenerator {
         }
     }
 
-    private void generateKingMoves(boolean friendly) {
+    private static void generateKingMoves(boolean friendly) {
 
         long binStartSquare = addBit(0, friendly ? friendlyKingPosition : opponentKingPosition);
         long[] kingTargets = new long[8];
@@ -482,7 +486,9 @@ public class MoveGenerator {
         }
     }
 
-    private void generateCastleMoves(boolean[] whiteCastlingRights, boolean[] blackCastlingRights) {
+    private static void generateCastleMoves() {
+        boolean[] whiteCastlingRights = Board.getWhiteCastlingRights();
+        boolean[] blackCastlingRights = Board.getBlackCastlingRights();
         if (friendlyColour == WHITE) {
             if (whiteCastlingRights[0] && squares[5] == 0 && squares[6] == 0) {
                 long involvedSquares = addBit(addBit(addBit(0, 6), 5), 4);
@@ -514,7 +520,7 @@ public class MoveGenerator {
         }
     }
 
-    private void generateSlidingMoves(int startSquare, int piece, boolean friendly) {
+    private static void generateSlidingMoves(int startSquare, int piece, boolean friendly) {
         int startDirIndex = isType(piece, BISHOP) ? 4 : 0;
         int endDirIndex = isType(piece, ROOK) ? 4 : 8;
         boolean moveBlocked;
@@ -550,7 +556,7 @@ public class MoveGenerator {
         }
     }
 
-    private long addBit(long bitboard, int position) {
+    private static long addBit(long bitboard, int position) {
         int root = position == 63 ? -2 : 2;
         if (position != 64) {
             return bitboard | (long) pow(root, position);
@@ -558,7 +564,7 @@ public class MoveGenerator {
         return bitboard;
     }
 
-    private long subBit(long bitboard, int position) {
+    private static long subBit(long bitboard, int position) {
         int root = position == 63 ? -2 : 2;
         if (position != 64) {
             return bitboard - (long) pow(root, position);
@@ -572,11 +578,11 @@ public class MoveGenerator {
      * @param bitboard the bitboard to query
      * @return the position of the least significant bit
      */
-    private int getPositionFromBitboard(long bitboard) {
+    private static int getPositionFromBitboard(long bitboard) {
         return Long.numberOfTrailingZeros(bitboard);
     }
 
-    private List<Integer> getPositionsFromBitboard(long bitboard) {
+    private static List<Integer> getPositionsFromBitboard(long bitboard) {
         List<Integer> positions = new ArrayList<>();
         while (bitboard > 0) {
             positions.add(getPositionFromBitboard(bitboard));
@@ -585,29 +591,29 @@ public class MoveGenerator {
         return positions;
     }
 
-    private void addMove(int start, int target) {
+    private static void addMove(int start, int target) {
         if (target < 0 || target > 63) {
             return;
         }
         moves.add(new Move(start, target));
     }
 
-    private void addKingMove(int start, int target) {
+    private static void addKingMove(int start, int target) {
         if (target < 0 || target > 63) {
             return;
         }
         kingMoves.add(new Move(start, target));
     }
 
-    public long getPinned() {
+    public static long getPinned() {
         return pinnedPieces;
     }
 
-    public long getTaboo() {
+    public static long getTaboo() {
         return taboo;
     }
 
-    public long getTabooXRay() {
+    public static long getTabooXRay() {
         return tabooXRay;
     }
 

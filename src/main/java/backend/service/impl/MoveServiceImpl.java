@@ -4,7 +4,7 @@
 //import backend.model.MoveRequest;
 //import backend.model.MoveResponse;
 //import backend.service.MoveService;
-//import org.example.logic.Board;
+//import org.example.logic.board.Board;
 //
 //public class MoveServiceImpl implements MoveService {
 //    @Override

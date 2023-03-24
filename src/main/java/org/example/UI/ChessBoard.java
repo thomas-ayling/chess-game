@@ -1,19 +1,16 @@
 package org.example.UI;
 
-import org.example.logic.Board;
+import org.example.logic.Engine;
 import org.example.logic.MoveGenerator.Move;
+import org.example.logic.board.Board;
 import org.example.logic.pieces.Piece;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.event.*;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 import static main.java.org.example.UI.Constants.*;
 import static org.example.logic.pieces.Piece.*;
@@ -38,7 +35,6 @@ public class ChessBoard extends JPanel implements ActionListener {
     int selectedStartSquare;
     List<Move> moves;
     List<Move> selectedMoves = new ArrayList<>();
-    Board board;
     boolean pieceIsSelected = false;
 
     public ChessBoard() {
@@ -46,18 +42,16 @@ public class ChessBoard extends JPanel implements ActionListener {
         setVisible(true);
         setFocusable(true);
         setBackground(Color.lightGray);
-        addMouseListener(new Adapter());
-
-        board = new Board();
+        addMouseListener(new MouseAdapterImpl());
+        addKeyListener(new KeyAdapterImpl());
 
         selectedStartSquare = -1;
 
-        moves = board.getMoves();
+        moves = Board.getMoves();
 
         timer.start();
-    }
-
-    public void setup() {
+        System.out.println("Engine result:");
+        System.out.println(Engine.search(5));
     }
 
     public void drawBoard(Graphics2D g2, int[] squares) {
@@ -73,7 +67,7 @@ public class ChessBoard extends JPanel implements ActionListener {
                     g2.setColor(Color.black);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }
-                if (String.format("%64s", Long.toBinaryString(board.getPinned())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
+                if (String.format("%64s", Long.toBinaryString(Board.getTaboo())).replace(' ', '0').charAt(file + (rank * 8)) == '1') {
                     g2.setColor(Color.red);
                     g2.fillRect(BOARD_HEIGHT - CELL_SIZE - file * CELL_SIZE, BOARD_HEIGHT - CELL_SIZE - (rank * CELL_SIZE), CELL_SIZE, CELL_SIZE);
                 }
@@ -117,7 +111,7 @@ public class ChessBoard extends JPanel implements ActionListener {
         g2.setColor(Color.WHITE);
         g2.fillRect(0, 0, BOARD_WIDTH, BOARD_HEIGHT);
         g2.setColor(Color.black);
-        drawBoard(g2, board.getSquares());
+        drawBoard(g2, Board.getSquares());
     }
 
     public void move() {
@@ -131,21 +125,11 @@ public class ChessBoard extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        setup();
         move();
         repaint();
     }
 
-    private class Adapter extends MouseAdapter {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            super.mousePressed(e);
-        }
-
+    private class MouseAdapterImpl extends MouseAdapter {
         @Override
         public void mouseReleased(MouseEvent e) {
             int mouseX = e.getX();
@@ -157,11 +141,11 @@ public class ChessBoard extends JPanel implements ActionListener {
                     int selectedTargetSquare = (rank * 8) + file;
                     for (Move move : moves) {
                         if (move.startSquare == selectedStartSquare && move.targetSquare == selectedTargetSquare) {
-                            board.move(move.startSquare, move.targetSquare);
+                            Board.move(move.startSquare, move.targetSquare);
                             pieceIsSelected = false;
                             selectedStartSquare = -1;
                             selectedMoves = new ArrayList<>();
-                            moves = board.getMoves();
+                            moves = Board.getMoves();
                             return;
                         }
                     }
@@ -170,7 +154,7 @@ public class ChessBoard extends JPanel implements ActionListener {
 //                System.out.println("MOUSE RELEASED");
 
                 selectedStartSquare = (rank * 8) + file;
-                if (Piece.isColour(board.getSquares()[selectedStartSquare], board.getColourToMove())) {
+                if (Piece.isColour(Board.getSquares()[selectedStartSquare], Board.getColourToMove())) {
                     selectedMoves = new ArrayList<>();
                     for (Move move : moves) {
                         if (move.startSquare == selectedStartSquare) {
@@ -183,25 +167,18 @@ public class ChessBoard extends JPanel implements ActionListener {
             }
             pieceIsSelected = false;
         }
+    }
 
+    private static class KeyAdapterImpl extends KeyAdapter {
         @Override
-        public void mouseEntered(MouseEvent e) {
-            super.mouseEntered(e);
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-            super.mouseExited(e);
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            super.mouseDragged(e);
-        }
-
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            super.mouseMoved(e);
+        public void keyReleased(KeyEvent e) {
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_LEFT:
+                    Board.undoMove();
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    break;
+            }
         }
     }
 }
